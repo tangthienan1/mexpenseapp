@@ -5,3 +5,5 @@ export const ADDEXPENSE_SCREEN = 'AddExpense';
 export const NOTE_SCREEN = 'Note';
 export const SIGNUP_SCREEN = 'SignUp';
 export const CONFIRMEMAIL_SCREEN = 'ConfirmEmail';
+export const FORGOTPASSWORD_SCREEN = 'ForgotPassword';
+export const NEWPASSWORD_SCREEN = 'NewPassword';

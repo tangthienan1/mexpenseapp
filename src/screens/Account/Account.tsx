@@ -1,23 +1,27 @@
 import React, { useState } from 'react';
-import { ActivityIndicator, Image, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, Alert, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { icons, MCOLORS, MFONTS, MSIZES } from '../../consts';
 import AccountOption from '../../components/AccountOptions';
+import { Auth } from 'aws-amplify';
+import { useAuth } from '../../contexts/useAuth';
 
 const Account = () => {
-    // const { user } = useAuth();
-
-    const user ={
-        email: 'testemail@gmail.com'
-    }
+    const { user } = useAuth();
 
     const [isSignOut, setIsSignOut] = useState(false);
 
-    const onSignOut = () => {
-        // setIsSignOut(true);
-        // auth()
-        //     .signOut()
-        //     .then(() => setIsSignOut(false));
+    const onSignOut = async () => {
+        if (isSignOut) {
+            return;
+        }
+        setIsSignOut(true);
+        try {
+            await Auth.signOut();
+        } catch (error) {
+            Alert.alert((error as any).message);
+        }
+        setIsSignOut(false);
     };
 
     return (
@@ -71,7 +75,7 @@ const Account = () => {
             <AccountOption title={'Settings'} />
             <AccountOption title={'Support Info'} />
             <AccountOption
-                title={'Sign out'}
+                title="Sign out"
                 onPress={onSignOut}
                 icon={isSignOut && <ActivityIndicator />}
             />

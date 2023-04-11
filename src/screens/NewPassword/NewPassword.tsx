@@ -12,37 +12,65 @@ import {
     View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { LOGIN_SCREEN, MCOLORS, MFONTS, MSIZES, icons } from '../../consts';
 import ErrorText from '../../components/Text';
-import { NEWPASSWORD_SCREEN } from '../../consts/screenName';
+import { LOGIN_SCREEN, MCOLORS, MFONTS, MSIZES, icons } from '../../consts';
+import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native';
 
-type ForgotPasswordProps = {
+type RouteParamProps = {
+    email: string;
+};
+
+type NewPasswordRouteProp = RouteProp<ParamListBase> & {
+    params: RouteParamProps;
+};
+type NewPasswordProps = {
     navigation: any;
 };
 
-const ForgotPassword: FC<ForgotPasswordProps> = ({ navigation }) => {
-    const [error, setError] = useState<string | undefined>();
+type ErrorType = {
+    newPassword?: string;
+    screen?: string;
+};
 
-    const [email, setEmail] = useState<string | undefined>();
+const NewPassword: FC<NewPasswordProps> = ({ navigation }) => {
+    const route = useRoute<NewPasswordRouteProp>();
+    const email = route?.params?.email;
+    const [error, setError] = useState<ErrorType>();
+
+    const [changeEmailCode, setChangeEmailCode] = useState<string | undefined>();
+    const [newPassword, setNewPassword] = useState<string | undefined>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const onConfirm = async () => {
+    const validatePassword = (inputPassword: string) => {
+        if (!/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,}$/.test(inputPassword)) {
+            setError({ ...error, ...{ newPassword: 'Invalid password' } });
+            return;
+        }
+        setError({ ...error, ...{ newPassword: undefined } });
+    };
+
+    const handleSubmit = async () => {
         if (isLoading) {
             return;
         }
 
         setIsLoading(true);
 
-        if (email) {
+        if (email && newPassword && changeEmailCode && !error?.newPassword && !error?.screen) {
             try {
-                await Auth.forgotPassword(email);
-                navigation.navigate(NEWPASSWORD_SCREEN, { email });
+                const response = await Auth.forgotPasswordSubmit(
+                    email,
+                    changeEmailCode,
+                    newPassword
+                );
+                console.log({ response });
+                navigation.navigate(LOGIN_SCREEN);
             } catch (e) {
                 console.log({ e });
                 setError((e as any).message);
             }
         } else {
-            setError('You need to complete the form!!');
+            setError({ ...error, ...{ screen: 'You need to complete the form!!' } });
         }
         setIsLoading(false);
     };
@@ -60,23 +88,36 @@ const ForgotPassword: FC<ForgotPasswordProps> = ({ navigation }) => {
                             Reset your password
                         </Text>
                         <Text style={{ color: MCOLORS.lightGreen, ...MFONTS.body3 }}>
-                            Please enter your email
+                            Please enter form to complete reset password
                         </Text>
                     </View>
 
                     <View style={loginStyle.form}>
                         <Text style={loginStyle.inputTile}>Email</Text>
+                        <TextInput editable={false} value={email} style={loginStyle.textInput} />
+
+                        <Text style={loginStyle.inputTile}>Code</Text>
                         <TextInput
                             style={loginStyle.textInput}
-                            onChangeText={(text) => setEmail(text as any)}
+                            onChangeText={(text) => setChangeEmailCode(text as any)}
                         />
-                        {error && <ErrorText message={error} />}
+
+                        <Text style={loginStyle.inputTile}>New Password</Text>
+
+                        <TextInput
+                            secureTextEntry={true}
+                            style={loginStyle.textInput}
+                            onChangeText={(text) => setNewPassword(text)}
+                            onBlur={(e) => validatePassword(e.nativeEvent.text)}
+                        />
+                        {error?.newPassword && <ErrorText message={error.newPassword} />}
+                        {error?.screen && <ErrorText message={error.screen} />}
 
                         <View style={loginStyle.buttonWrapper}>
-                            <TouchableOpacity style={loginStyle.loginButton} onPress={onConfirm}>
+                            <TouchableOpacity style={loginStyle.loginButton} onPress={handleSubmit}>
                                 {!isLoading ? (
                                     <Text style={{ color: MCOLORS.white, ...MFONTS.h3 }}>
-                                        Confirm
+                                        Submit
                                     </Text>
                                 ) : (
                                     <ActivityIndicator color={MCOLORS.emerald} />
@@ -162,4 +203,4 @@ export const loginStyle = StyleSheet.create({
         width: 192,
     },
 });
-export default ForgotPassword;
+export default NewPassword;

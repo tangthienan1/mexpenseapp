@@ -6,19 +6,14 @@ import ManageApp from './ManageApp';
 import { useAuth } from '../contexts/useAuth';
 
 export default function RootNavigation() {
-    const { user, initializing } = useAuth();
-    const [trip, setTrip] = useState();
-    console.log({ trip });
+    const { user } = useAuth();
+    console.log({ user });
 
     useEffect(() => {
         SplashScreen.hide();
     }, []);
 
-    if (initializing) {
-        return null;
-    }
-
-    return !user ? (
+    return user ? (
         <SharedStateProvider>
             <ManageApp user={user} />
         </SharedStateProvider>

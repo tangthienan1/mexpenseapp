@@ -14,6 +14,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import ErrorText from '../../components/Text';
 import { MCOLORS, MFONTS, MSIZES, SIGNUP_SCREEN, icons } from '../../consts';
+import { FORGOTPASSWORD_SCREEN } from '../../consts/screenName';
 
 type LoginProps = {
     navigation: any;
@@ -25,16 +26,6 @@ const Login: FC<LoginProps> = ({navigation}) => {
     const [email, setEmail] = useState<string | undefined>();
     const [password, setPassword] = useState<string | undefined>();
     const [isLoginProgress, setIsLoginProgress] = useState<boolean>(false);
-
-    const onForgotPassword = () => {
-        // if (email) {
-        //     auth()
-        //         .sendPasswordResetEmail(email)
-        //         .then(() => {
-        //             console.log('Password Sended to your email');
-        //         });
-        // }
-    };
 
     const handleLogin = async () => {
         if (isLoginProgress) {
@@ -90,7 +81,7 @@ const Login: FC<LoginProps> = ({navigation}) => {
 
                         <TouchableOpacity
                             style={loginStyle.forgotPassword}
-                            onPress={onForgotPassword}
+                            onPress={()=>navigation.navigate(FORGOTPASSWORD_SCREEN)}
                         >
                             <Text style={loginStyle.inputTile}>Forgot Password?</Text>
                         </TouchableOpacity>

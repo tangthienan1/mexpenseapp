@@ -23,7 +23,7 @@ type ErrorType = {
     email?: string;
     password?: string;
     reEnPassword?: string;
-    signUp?: string;
+    screen?: string;
 };
 
 const SignUp: FC<SignUpProps> = ({ navigation }) => {
@@ -81,10 +81,10 @@ const SignUp: FC<SignUpProps> = ({ navigation }) => {
                 setIsLoading(false);
                 navigation.navigate(CONFIRMEMAIL_SCREEN, { email });
             } catch (e) {
-                setError({ ...error, ...{ signUp: (e as any).message } });
+                setError({ ...error, ...{ screen: (e as any).message } });
             }
         } else {
-            setError({ ...error, ...{ signUp: 'You have to complete the form!!' } });
+            setError({ ...error, ...{ screen: 'You have to complete the form!!' } });
         }
         setIsLoading(false);
     };
@@ -155,7 +155,7 @@ const SignUp: FC<SignUpProps> = ({ navigation }) => {
                                 )}
                             </TouchableOpacity>
                         </View>
-                        {error?.signUp && <ErrorText message={error.signUp} />}
+                        {error?.screen && <ErrorText message={error.screen} />}
 
                         <TouchableOpacity
                             style={loginStyle.bottomText}
