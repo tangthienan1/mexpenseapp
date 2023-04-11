@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { StyleSheet, TextInput, TextInputProps } from 'react-native';
-import { MCOLORS, MSIZES } from '../consts';
+import { MCOLORS, MSIZES } from '../../consts';
 
 export const TextField: FC<{ height?: number } & TextInputProps> = (props) => {
     return (

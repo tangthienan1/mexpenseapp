@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { GestureResponderEvent, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { MCOLORS, MFONTS, MSIZES } from '../consts';
+import { MCOLORS, MFONTS, MSIZES } from '../../consts';
 
 type SaveBtnProps = {
     onPress: ((event: GestureResponderEvent) => void) | undefined

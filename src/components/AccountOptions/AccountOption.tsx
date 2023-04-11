@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { icons, MCOLORS, MSIZES } from '../consts';
+import { icons, MCOLORS, MSIZES } from '../../consts';
 
 type AccountOptionProps = {
     onPress?: () => void;

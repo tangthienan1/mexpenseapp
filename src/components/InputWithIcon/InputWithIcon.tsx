@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { StyleSheet, TextInput, TextInputProps, View } from 'react-native';
-import { MCOLORS, MFONTS, MSIZES } from '../consts';
+import { MCOLORS, MFONTS, MSIZES } from '../../consts';
 
 type InputWithIconProps = {
     icon: any;

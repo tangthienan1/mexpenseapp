@@ -1,7 +1,7 @@
 import { Image, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { FC, useState } from 'react';
-import { icons, MCOLORS, MFONTS, MSIZES } from '../consts';
-import Tag from './Tag';
+import { icons, MCOLORS, MFONTS, MSIZES } from '../../consts';
+import Tag from '../Tag/Tag';
 
 export type TripSummaryProps = {
     tripName: string;

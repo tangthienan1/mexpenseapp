@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { icons, MFONTS, MSIZES } from '../consts';
+import { icons, MFONTS, MSIZES } from '../../consts';
 
 type AccountOptionProps = {
     header: string;

@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { StyleSheet, Text } from 'react-native';
-import { MFONTS, MSIZES } from '../consts';
+import { MFONTS, MSIZES } from '../../consts';
 
 type InputTitleProps = {
     title: string;

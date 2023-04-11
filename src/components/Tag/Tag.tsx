@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
-import { MCOLORS, MFONTS, MSIZES } from '../consts';
+import { MCOLORS, MFONTS, MSIZES } from '../../consts';
 
 type TagProps = {
     tag: string;

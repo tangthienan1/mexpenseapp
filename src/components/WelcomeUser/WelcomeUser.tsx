@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
-import { ACCOUNT_SCREEN, icons, MFONTS, MSIZES } from '../consts';
+import { ACCOUNT_SCREEN, icons, MFONTS, MSIZES } from '../../consts';
 
 type WelcomeUserProps = {
     navigation: any;

@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import { icons, MCOLORS, MSIZES } from '../consts';
+import { icons, MCOLORS, MSIZES } from '../../consts';
 
 type DataType = {
     key: string;

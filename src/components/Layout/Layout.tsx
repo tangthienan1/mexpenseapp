@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { SafeAreaView, StyleSheet } from 'react-native';
-import { MCOLORS } from '../consts';
+import { MCOLORS } from '../../consts';
 
 type LayoutProps = {
     children: any;
