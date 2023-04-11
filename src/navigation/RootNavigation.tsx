@@ -7,7 +7,6 @@ import { useAuth } from '../contexts/useAuth';
 
 export default function RootNavigation() {
     const { user } = useAuth();
-    console.log({ user });
 
     useEffect(() => {
         SplashScreen.hide();

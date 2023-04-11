@@ -1,13 +1,16 @@
+import { Auth } from 'aws-amplify';
 import React, { useState } from 'react';
 import { ActivityIndicator, Alert, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { icons, MCOLORS, MFONTS, MSIZES } from '../../consts';
 import AccountOption from '../../components/AccountOptions';
-import { Auth } from 'aws-amplify';
-import { useAuth } from '../../contexts/useAuth';
+import { MCOLORS, MFONTS, MSIZES, icons } from '../../consts';
+import { useSharedState } from '../../contexts';
 
 const Account = () => {
-    const { user } = useAuth();
+    const { user } = useSharedState();
+    console.log({ user });
+    const userEmail = user.attributes.email
+    const userName = user.attributes.name
 
     const [isSignOut, setIsSignOut] = useState(false);
 
@@ -65,9 +68,9 @@ const Account = () => {
             </View>
 
             <View style={{ alignItems: 'center', marginBottom: MSIZES.padding2 * 5 }}>
-                <Text style={{ ...MFONTS.body2 }}>Ho Nguyen Phu Bao</Text>
-                <Text style={{ ...MFONTS.body2, color: MCOLORS.gray }}>(+84) 963 893 893</Text>
-                <Text style={{ ...MFONTS.body2, color: MCOLORS.gray }}>{user?.email}</Text>
+                <Text style={{ ...MFONTS.body2 }}>{userName}</Text>
+                {/* <Text style={{ ...MFONTS.body2, color: MCOLORS.gray }}>(+84) 963 893 893</Text> */}
+                <Text style={{ ...MFONTS.body2, color: MCOLORS.gray }}>{userEmail}</Text>
             </View>
 
             <AccountOption title={'Edit Profile'} />
