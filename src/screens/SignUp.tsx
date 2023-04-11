@@ -1,3 +1,4 @@
+import { Auth } from 'aws-amplify';
 import React, { FC, useState } from 'react';
 import {
     ActivityIndicator,
@@ -11,7 +12,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import { ErrorText } from '../components/Text/Text';
-import { icons, LoginScreen, MCOLORS, MFONTS, MSIZES } from '../consts';
+import { CONFIRMEMAIL_SCREEN, LOGIN_SCREEN, MCOLORS, MFONTS, MSIZES, icons } from '../consts';
 import { loginStyle } from './Login';
 
 type SignUpProps = {
@@ -26,8 +27,9 @@ type ErrorType = {
 };
 
 const SignUp: FC<SignUpProps> = ({ navigation }) => {
-    const [email, setEmail] = useState<string>();
-    const [password, setPassword] = useState<string>();
+    const [name, setName] = useState<string | undefined>();
+    const [email, setEmail] = useState<string | undefined>();
+    const [password, setPassword] = useState<string | undefined>();
     const [error, setError] = useState<ErrorType>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -56,22 +58,35 @@ const SignUp: FC<SignUpProps> = ({ navigation }) => {
     };
 
     const handleSignUp = () => {
-        if (email && password && !error?.email && !error?.password && !error?.reEnPassword) {
-            setIsLoading(true);
-            // auth()
-            //     .createUserWithEmailAndPassword(email, password)
-            //     .then(() => {
-            //         setIsLoading(false);
-            //         navigation.navigate('Login');
-            //     })
-            //     .catch((err) => {
-            //         setIsLoading(false);
-            //         // console.log({ err });
-            //         setError({ ...error, ...{ signUp: 'Something went wrong' } });
-            //     });
+        if (isLoading) {
+            return;
+        }
+
+        setIsLoading(true);
+        if (
+            name &&
+            email &&
+            password &&
+            !error?.email &&
+            !error?.password &&
+            !error?.reEnPassword
+        ) {
+            try {
+                const res = Auth.signUp({
+                    username: email,
+                    password,
+                    attributes: { name },
+                });
+                console.log({ res });
+                setIsLoading(false);
+                navigation.navigate(CONFIRMEMAIL_SCREEN, { email });
+            } catch (e) {
+                setError({ ...error, ...{ signUp: (e as any).message } });
+            }
         } else {
             setError({ ...error, ...{ signUp: 'You have to complete the form!!' } });
         }
+        setIsLoading(false);
     };
 
     return (
@@ -83,21 +98,22 @@ const SignUp: FC<SignUpProps> = ({ navigation }) => {
                     </View>
 
                     <View style={loginStyle.title}>
-                        <Text style={{ color: MCOLORS.lightGreen, ...MFONTS.h1 }}>SignUp</Text>
+                        <Text style={{ color: MCOLORS.lightGreen, ...MFONTS.h1 }}>Sign Up</Text>
                         <Text style={{ color: MCOLORS.lightGreen }}>
                             Please enter the detail to get started
                         </Text>
                     </View>
 
                     <View style={loginStyle.form}>
-                        {/* <Text style={loginStyle.inputTile}>Name</Text>
+                        <Text style={loginStyle.inputTile}>Name</Text>
                         <TextInput
                             style={loginStyle.textInput}
                             onChangeText={(text) => setName(text)}
-                        /> */}
+                        />
 
                         <Text style={loginStyle.inputTile}>Email</Text>
                         <TextInput
+                            keyboardType="email-address"
                             style={loginStyle.textInput}
                             onChangeText={(text) => setEmail(text)}
                             onBlur={(e) => validateEmail(e.nativeEvent.text)}
@@ -132,7 +148,7 @@ const SignUp: FC<SignUpProps> = ({ navigation }) => {
                             <TouchableOpacity style={loginStyle.loginButton} onPress={handleSignUp}>
                                 {!isLoading ? (
                                     <Text style={{ color: MCOLORS.white, ...MFONTS.h3 }}>
-                                        SignUp
+                                        Confirm
                                     </Text>
                                 ) : (
                                     <ActivityIndicator color={MCOLORS.emerald} />
@@ -143,7 +159,7 @@ const SignUp: FC<SignUpProps> = ({ navigation }) => {
 
                         <TouchableOpacity
                             style={loginStyle.bottomText}
-                            onPress={() => navigation.navigate(LoginScreen)}
+                            onPress={() => navigation.navigate(LOGIN_SCREEN)}
                         >
                             <Text style={loginStyle.inputTile}>
                                 Already have an account?

@@ -9,8 +9,10 @@
     "amplify/backend/awscloudformation": true
   },
   "cSpell.words": [
+    "ADDEXPENSE",
     "AOTOINCREMENT",
     "bublenote",
+    "CONFIRMEMAIL",
     "consts",
     "emptyavatar",
     "greentick",
@@ -20,6 +22,8 @@
     "MSIZES",
     "requiredassesment",
     "rightarrow",
-    "Roboto"
+    "Roboto",
+    "SIGNUP",
+    "TRIPLIST"
   ]
 }

@@ -12,7 +12,7 @@ import {
 import Layout from '../components/Layout';
 import TripSummary from '../components/TripSummary';
 import WelcomeUser from '../components/WelcomeUser';
-import { AddExpenseScreen, icons, MCOLORS, MFONTS, MSIZES, NoteScreen, TripListScreen } from '../consts';
+import { ADDEXPENSE_SCREEN, icons, MCOLORS, MFONTS, MSIZES, NOTE_SCREEN, TRIPLIST_SCREEN } from '../consts';
 import { HomeEntriesItemProps } from '../type';
 
 type HomeScreenProps = {
@@ -170,7 +170,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
                     }}
                 >
                     <Text style={{ ...MFONTS.h3 }}>Trip Summary</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate(TripListScreen)}>
+                    <TouchableOpacity onPress={() => navigation.navigate(TRIPLIST_SCREEN)}>
                         <Text style={{ color: MCOLORS.gray, ...MFONTS.body4 }}>View All</Text>
                     </TouchableOpacity>
                 </View>
@@ -189,7 +189,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
                             styles.tripOptionWrapper,
                             { marginRight: MSIZES.padding },
                         ]}
-                        onPress={() => navigation.navigate(AddExpenseScreen)}
+                        onPress={() => navigation.navigate(ADDEXPENSE_SCREEN)}
                     >
                         <Image source={icons.expenses} />
                         <Text style={{ fontWeight: 'bold' }}>Expenses</Text>
@@ -204,7 +204,7 @@ const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
                             styles.tripOptionWrapper,
                             { marginLeft: MSIZES.padding },
                         ]}
-                        onPress={() => navigation.navigate(NoteScreen)}
+                        onPress={() => navigation.navigate(NOTE_SCREEN)}
                     >
                         <Image source={icons.bublenote} />
                         <Text style={{ fontWeight: 'bold' }}>Note</Text>

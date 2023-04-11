@@ -1,7 +1,8 @@
 {
-  "compilerOptions": {
-    "baseUrl": "src",
-    "target": "ES6"
-  },
-  "extends": "@tsconfig/react-native/tsconfig.json"
+    "compilerOptions": {
+        "target": "ES6",
+        
+    },
+    "extends": "@tsconfig/react-native/tsconfig.json",
+    "include": ["src/**/*"]
 }

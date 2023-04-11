@@ -2,6 +2,7 @@ import { Auth } from 'aws-amplify';
 import React, { FC, useState } from 'react';
 import {
     ActivityIndicator,
+    Alert,
     Image,
     KeyboardAvoidingView,
     ScrollView,
@@ -13,48 +14,57 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import ErrorText from '../components/Text';
-import { MCOLORS, MFONTS, MSIZES, SIGNUP_SCREEN, icons } from '../consts';
+import { LOGIN_SCREEN, MCOLORS, MFONTS, MSIZES, SIGNUP_SCREEN, icons } from '../consts';
+import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native';
 
-type LoginProps = {
+type RouteParamProps = {
+    email: string;
+};
+
+type ConfirmEmailRouteProp = RouteProp<ParamListBase> & {
+    params: RouteParamProps;
+};
+
+type ConfirmEmailProps = {
     navigation: any;
 };
 
-const Login: FC<LoginProps> = ({navigation}) => {
+const ConfirmEmail: FC<ConfirmEmailProps> = ({ navigation }) => {
+    const route = useRoute<ConfirmEmailRouteProp>();
+    const email = route?.params?.email
+    
     const [error, setError] = useState<string | undefined>();
+    const [confirmCode, setConfirmCode] = useState<string | undefined>();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const [email, setEmail] = useState<string | undefined>();
-    const [password, setPassword] = useState<string | undefined>();
-    const [isLoginProgress, setIsLoginProgress] = useState<boolean>(false);
 
-    const onForgotPassword = () => {
-        // if (email) {
-        //     auth()
-        //         .sendPasswordResetEmail(email)
-        //         .then(() => {
-        //             console.log('Password Sended to your email');
-        //         });
-        // }
+    const onResendCodePress = async () => {
+        try {
+            await Auth.resendSignUp(email)
+        } catch (e) {
+            Alert.alert((e as any).message)
+        }
     };
 
-    const handleLogin = async () => {
-        if (isLoginProgress) {
+    const handleConfirm = async () => {
+        if (isLoading) {
             return;
         }
 
-        setIsLoginProgress(true);
+        setIsLoading(true);
 
-        if (email && password) {
+        if (email && confirmCode) {
             try {
-                const response = await Auth.signIn(email, password);
-                console.log({ response });
+                await Auth.confirmSignUp(email, confirmCode);
+                navigation.navigate(LOGIN_SCREEN)
             } catch (e) {
-                console.log({ e });
-                setError((e as any).message);
+                Alert.alert((e as any).message);
             }
         } else {
             setError('You need to complete the form!!');
         }
-        setIsLoginProgress(false);
+
+        setIsLoading(false);
     };
 
     return (
@@ -66,39 +76,38 @@ const Login: FC<LoginProps> = ({navigation}) => {
                     </View>
 
                     <View style={loginStyle.title}>
-                        <Text style={{ color: MCOLORS.lightGreen, ...MFONTS.h1 }}>Login</Text>
+                        <Text style={{ color: MCOLORS.lightGreen, ...MFONTS.h1 }}>
+                            Confirm your email
+                        </Text>
                         <Text style={{ color: MCOLORS.lightGreen, ...MFONTS.body3 }}>
-                            Please enter the detail login
+                            Verify your email for security
                         </Text>
                     </View>
 
                     <View style={loginStyle.form}>
                         <Text style={loginStyle.inputTile}>Email</Text>
                         <TextInput
+                            value={email} 
                             style={loginStyle.textInput}
-                            onChangeText={(text) => setEmail(text as any)}
+                            editable={false}
                         />
 
-                        <Text style={loginStyle.inputTile}>Password</Text>
+                        <Text style={loginStyle.inputTile}>Code</Text>
 
                         <TextInput
-                            secureTextEntry={true}
                             style={loginStyle.textInput}
-                            onChangeText={(text) => setPassword(text)}
+                            onChangeText={(text) => setConfirmCode(text)}
                         />
                         {error && <ErrorText message={error} />}
 
-                        <TouchableOpacity
-                            style={loginStyle.forgotPassword}
-                            onPress={onForgotPassword}
-                        >
-                            <Text style={loginStyle.inputTile}>Forgot Password?</Text>
+                        <TouchableOpacity style={loginStyle.resendCode} onPress={onResendCodePress}>
+                            <Text style={loginStyle.inputTile}>Resend</Text>
                         </TouchableOpacity>
                         <View style={loginStyle.buttonWrapper}>
-                            <TouchableOpacity style={loginStyle.loginButton} onPress={handleLogin}>
-                                {!isLoginProgress ? (
+                            <TouchableOpacity style={loginStyle.loginButton} onPress={handleConfirm}>
+                                {!isLoading ? (
                                     <Text style={{ color: MCOLORS.white, ...MFONTS.h3 }}>
-                                        Login
+                                        Confirm
                                     </Text>
                                 ) : (
                                     <ActivityIndicator color={MCOLORS.emerald} />
@@ -108,11 +117,11 @@ const Login: FC<LoginProps> = ({navigation}) => {
 
                         <TouchableOpacity
                             style={loginStyle.bottomText}
-                            onPress={() => navigation.navigate(SIGNUP_SCREEN)}
+                            onPress={() => navigation.navigate(LOGIN_SCREEN)}
                         >
                             <Text style={loginStyle.inputTile}>
-                                New User?
-                                <Text style={{ color: MCOLORS.black }}>Sign Up</Text>
+                                Already have an account? {' '}
+                                <Text style={{ color: MCOLORS.black }}>Login</Text>
                             </Text>
                         </TouchableOpacity>
                     </View>
@@ -134,8 +143,8 @@ export const loginStyle = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    forgotPassword: {
-        alignItems: 'flex-end',
+    resendCode: {
+        alignItems: 'flex-start',
         textAlign: 'right',
 
         ...MFONTS.h3,
@@ -187,4 +196,4 @@ export const loginStyle = StyleSheet.create({
         width: 192,
     },
 });
-export default Login;
+export default ConfirmEmail;

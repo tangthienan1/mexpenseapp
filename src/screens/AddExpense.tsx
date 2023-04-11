@@ -9,7 +9,7 @@ import InputTitle from '../components/InputTitle';
 import InputWithIcon from '../components/InputWithIcon';
 import SaveBtn from '../components/SaveBtn';
 import { CustomTextInput, TextField } from '../components/TextInput';
-import { GlobalFormatDate, icons, LoginScreen, MCOLORS, MSIZES } from '../consts';
+import { GlobalFormatDate, icons, LOGIN_SCREEN, MCOLORS, MSIZES } from '../consts';
 
 type AddExpenseProps = {
     navigation: any;
@@ -20,7 +20,7 @@ const AddExpense: FC<AddExpenseProps> = ({ navigation }) => {
     const [open, setOpen] = useState(false);
 
     return (
-        <SafeAreaView style={styles.addExpenseScreen}>
+        <SafeAreaView style={styles.ADDEXPENSE_SCREEN}>
             <CustomDatePicker open={open} currentDate={date} setOpen={setOpen} setDate={setDate} />
 
             <View style={{ marginHorizontal: MSIZES.padding }}>
@@ -60,7 +60,7 @@ const AddExpense: FC<AddExpenseProps> = ({ navigation }) => {
                     <InputTitle title={'Comment'} />
                     <TextField />
 
-                    <SaveBtn onPress={() => navigation.navigate(LoginScreen)} />
+                    <SaveBtn onPress={() => navigation.navigate(LOGIN_SCREEN)} />
                 </View>
             </View>
         </SafeAreaView>
@@ -70,7 +70,7 @@ const AddExpense: FC<AddExpenseProps> = ({ navigation }) => {
 export default AddExpense;
 
 const styles = StyleSheet.create({
-    addExpenseScreen: {
+    ADDEXPENSE_SCREEN: {
         flex: 1,
         backgroundColor: MCOLORS.white,
     },
