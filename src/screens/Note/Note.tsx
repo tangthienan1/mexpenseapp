@@ -10,10 +10,10 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import Layout from '../components/Layout';
-import WelcomeUser from '../components/WelcomeUser';
-import { icons, MCOLORS, MFONTS, MSIZES } from '../consts';
-import { NoteItemType } from '../type';
+import Layout from '../../components/Layout';
+import WelcomeUser from '../../components/WelcomeUser';
+import { icons, MCOLORS, MFONTS, MSIZES } from '../../consts';
+import { NoteItemType } from '../../type';
 
 const Notes = [
     {

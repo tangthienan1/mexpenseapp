@@ -9,11 +9,11 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import Layout from '../components/Layout';
-import TripSummary from '../components/TripSummary';
-import WelcomeUser from '../components/WelcomeUser';
-import { ADDEXPENSE_SCREEN, icons, MCOLORS, MFONTS, MSIZES, NOTE_SCREEN, TRIPLIST_SCREEN } from '../consts';
-import { HomeEntriesItemProps } from '../type';
+import Layout from '../../components/Layout';
+import TripSummary from '../../components/TripSummary';
+import WelcomeUser from '../../components/WelcomeUser';
+import { ADDEXPENSE_SCREEN, icons, MCOLORS, MFONTS, MSIZES, NOTE_SCREEN, TRIPLIST_SCREEN } from '../../consts';
+import { HomeEntriesItemProps } from '../../type';
 
 type HomeScreenProps = {
     navigation: any;

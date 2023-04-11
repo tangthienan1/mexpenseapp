@@ -13,8 +13,8 @@ import {
     View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import ErrorText from '../components/Text';
-import { LOGIN_SCREEN, MCOLORS, MFONTS, MSIZES, SIGNUP_SCREEN, icons } from '../consts';
+import ErrorText from '../../components/Text';
+import { LOGIN_SCREEN, MCOLORS, MFONTS, MSIZES, SIGNUP_SCREEN, icons } from '../../consts';
 import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native';
 
 type RouteParamProps = {

@@ -11,16 +11,16 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import CustomDatePicker from '../components/CustomDatePicker';
-import InputTitle from '../components/InputTitle';
-import InputWithIcon from '../components/InputWithIcon';
-import SaveBtn from '../components/SaveBtn';
-import SelectDropDown from '../components/SelectDropDown';
-import { CustomTextInput, TextField } from '../components/TextInput';
-import WelcomeUser from '../components/WelcomeUser';
-import { GlobalFormatDate, icons, MCOLORS, MFONTS, MSIZES } from '../consts';
-import { useSharedState } from '../contexts';
-import { TagType } from '../type';
+import CustomDatePicker from '../../components/CustomDatePicker';
+import InputTitle from '../../components/InputTitle';
+import InputWithIcon from '../../components/InputWithIcon';
+import SaveBtn from '../../components/SaveBtn';
+import SelectDropDown from '../../components/SelectDropDown';
+import { CustomTextInput, TextField } from '../../components/TextInput';
+import WelcomeUser from '../../components/WelcomeUser';
+import { GlobalFormatDate, icons, MCOLORS, MFONTS, MSIZES } from '../../consts';
+import { useSharedState } from '../../contexts';
+import { TagType } from '../../type';
 
 const Tags = [
     {

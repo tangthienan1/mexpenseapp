@@ -11,9 +11,9 @@ import {
     View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { ErrorText } from '../components/Text/Text';
-import { CONFIRMEMAIL_SCREEN, LOGIN_SCREEN, MCOLORS, MFONTS, MSIZES, icons } from '../consts';
-import { loginStyle } from './Login';
+import { ErrorText } from '../../components/Text/Text';
+import { CONFIRMEMAIL_SCREEN, LOGIN_SCREEN, MCOLORS, MFONTS, MSIZES, icons } from '../../consts';
+import { loginStyle } from '../Login/Login';
 
 type SignUpProps = {
     navigation?: any;

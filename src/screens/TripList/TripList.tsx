@@ -9,10 +9,10 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import Layout from '../components/Layout';
-import TripSummary, { TripSummaryProps } from '../components/TripSummary';
-import WelcomeUser from '../components/WelcomeUser';
-import { icons, MCOLORS, MSIZES } from '../consts';
+import Layout from '../../components/Layout';
+import TripSummary, { TripSummaryProps } from '../../components/TripSummary';
+import WelcomeUser from '../../components/WelcomeUser';
+import { icons, MCOLORS, MSIZES } from '../../consts';
 
 const Trips = [
     {

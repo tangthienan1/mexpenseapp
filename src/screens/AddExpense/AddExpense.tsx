@@ -3,13 +3,13 @@ import moment from 'moment';
 import React, { FC, useState } from 'react';
 import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import AddExpenseHeader from '../components/AddExpenseHeader';
-import CustomDatePicker from '../components/CustomDatePicker';
-import InputTitle from '../components/InputTitle';
-import InputWithIcon from '../components/InputWithIcon';
-import SaveBtn from '../components/SaveBtn';
-import { CustomTextInput, TextField } from '../components/TextInput';
-import { GlobalFormatDate, icons, LOGIN_SCREEN, MCOLORS, MSIZES } from '../consts';
+import AddExpenseHeader from '../../components/AddExpenseHeader';
+import CustomDatePicker from '../../components/CustomDatePicker';
+import InputTitle from '../../components/InputTitle';
+import InputWithIcon from '../../components/InputWithIcon';
+import SaveBtn from '../../components/SaveBtn';
+import { CustomTextInput, TextField } from '../../components/TextInput';
+import { GlobalFormatDate, icons, LOGIN_SCREEN, MCOLORS, MSIZES } from '../../consts';
 
 type AddExpenseProps = {
     navigation: any;

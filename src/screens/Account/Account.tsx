@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { ActivityIndicator, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import AccountOption from '../components/AccountOption';
-import { icons, MCOLORS, MFONTS, MSIZES } from '../consts';
+import AccountOption from '../../components/AccountOption';
+import { icons, MCOLORS, MFONTS, MSIZES } from '../../consts';
 
 const Account = () => {
     // const { user } = useAuth();
