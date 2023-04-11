@@ -8,8 +8,8 @@ import CustomDatePicker from '../../components/CustomDatePicker';
 import InputTitle from '../../components/InputTitle';
 import InputWithIcon from '../../components/InputWithIcon';
 import SaveBtn from '../../components/SaveBtn';
-import { CustomTextInput, TextField } from '../../components/TextInput';
 import { GlobalFormatDate, icons, LOGIN_SCREEN, MCOLORS, MSIZES } from '../../consts';
+import { CustomTextInput, TextField } from '../../components/TextInput';
 
 type AddExpenseProps = {
     navigation: any;

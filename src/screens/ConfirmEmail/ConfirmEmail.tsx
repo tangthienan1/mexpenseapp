@@ -41,6 +41,7 @@ const ConfirmEmail: FC<ConfirmEmailProps> = ({ navigation }) => {
     const onResendCodePress = async () => {
         try {
             await Auth.resendSignUp(email)
+            Alert.alert("Success")
         } catch (e) {
             Alert.alert((e as any).message)
         }

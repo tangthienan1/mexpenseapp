@@ -1,3 +1,3 @@
-import { TextInput } from "react-native/types";
+import { CustomTextInput, TextField } from './TextInput';
 
-export default TextInput
+export { TextField, CustomTextInput };
