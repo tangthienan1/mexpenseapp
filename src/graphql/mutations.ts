@@ -228,6 +228,7 @@ export const createUser = /* GraphQL */ `
         nextToken
         startedAt
       }
+      image
       createdAt
       updatedAt
       _version
@@ -249,6 +250,7 @@ export const updateUser = /* GraphQL */ `
         nextToken
         startedAt
       }
+      image
       createdAt
       updatedAt
       _version
@@ -270,6 +272,7 @@ export const deleteUser = /* GraphQL */ `
         nextToken
         startedAt
       }
+      image
       createdAt
       updatedAt
       _version

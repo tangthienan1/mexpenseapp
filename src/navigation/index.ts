@@ -1,3 +1,5 @@
-import RootNavigation from "./RootNavigation";
+import AuthApp from './AuthApp';
+import ManageApp from './ManageApp';
+import Tabs from './tabs';
 
-export default RootNavigation
+export { ManageApp, AuthApp, Tabs };

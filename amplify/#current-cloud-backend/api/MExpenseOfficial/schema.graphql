@@ -32,7 +32,9 @@ type Trip @model @auth(rules: [{allow: public}]) {
 
 type User @model @auth(rules: [{allow: public}]) {
   id: ID!
-  name: String
-  email: String
+  name: String!
+  email: String!
   Trips: [Trip] @hasMany(indexName: "byUser", fields: ["id"])
-} 
+  image: String
+}
+ 

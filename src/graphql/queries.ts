@@ -350,6 +350,7 @@ export const getUser = /* GraphQL */ `
         nextToken
         startedAt
       }
+      image
       createdAt
       updatedAt
       _version
@@ -369,6 +370,7 @@ export const listUsers = /* GraphQL */ `
         id
         name
         email
+        image
         createdAt
         updatedAt
         _version
@@ -397,6 +399,7 @@ export const syncUsers = /* GraphQL */ `
         id
         name
         email
+        image
         createdAt
         updatedAt
         _version
