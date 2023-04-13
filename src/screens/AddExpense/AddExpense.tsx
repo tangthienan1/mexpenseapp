@@ -2,7 +2,7 @@ import moment from 'moment';
 import React, { FC, useState } from 'react';
 import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import AddExpenseHeader from '../../components/AddExpenseHeader';
+import GoBackWithHeader from '../../components/GoBackWithHeader';
 import CustomDatePicker from '../../components/CustomDatePicker';
 import InputTitle from '../../components/InputTitle';
 import InputWithIcon from '../../components/InputWithIcon';
@@ -29,7 +29,7 @@ const AddExpense: FC<AddExpenseProps> = ({ navigation }) => {
             <CustomDatePicker open={open} currentDate={date} setOpen={setOpen} setDate={setDate} />
 
             <View style={{ marginHorizontal: MSIZES.padding }}>
-                <AddExpenseHeader header="Add Expense" navigation={navigation} />
+                <GoBackWithHeader header="Add Expense" navigation={navigation} />
 
                 <View style={styles.wrapper}>
                     <InputTitle title="Amount" />

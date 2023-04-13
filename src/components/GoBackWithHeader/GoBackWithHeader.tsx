@@ -7,7 +7,7 @@ type AccountOptionProps = {
     navigation: any;
 };
 
-const AddExpenseHeader:FC<AccountOptionProps> = ({ header, navigation }) => {
+const GoBackWithHeader:FC<AccountOptionProps> = ({ header, navigation }) => {
     return (
         <View style={styles.wrapper}>
             <TouchableOpacity style={styles.image} onPress={() => navigation.goBack()}>
@@ -18,7 +18,7 @@ const AddExpenseHeader:FC<AccountOptionProps> = ({ header, navigation }) => {
     );
 };
 
-export default AddExpenseHeader;
+export default GoBackWithHeader;
 
 const styles = StyleSheet.create({
     wrapper: {
