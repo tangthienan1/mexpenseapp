@@ -13,7 +13,7 @@ import {
 import Layout from '../../components/Layout';
 import WelcomeUser from '../../components/WelcomeUser';
 import { ADDNOTE_SCREEN, MCOLORS, MFONTS, MSIZES, icons } from '../../consts';
-import { NoteItemType } from '../../type';
+import { NoteItemType } from '../../type/type';
 
 const Notes = [
     {

@@ -20,7 +20,7 @@ import { CustomTextInput, TextField } from '../../components/TextInput';
 import WelcomeUser from '../../components/WelcomeUser';
 import { GlobalFormatDate, icons, MCOLORS, MFONTS, MSIZES } from '../../consts';
 import { useSharedState } from '../../contexts';
-import { TagType } from '../../type';
+import { TagType } from '../../type/type';
 
 const Tags = [
     {
