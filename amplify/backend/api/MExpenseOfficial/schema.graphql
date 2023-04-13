@@ -1,0 +1,38 @@
+type Note @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  date: AWSDateTime
+  title: String
+  content: String
+  tripID: ID! @index(name: "byTrip")
+}
+
+type Expense @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  amount: Float!
+  type: String!
+  location: String
+  date: AWSDateTime
+  comment: String
+  tripID: ID! @index(name: "byTrip")
+}
+
+type Trip @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  tripName: String
+  destination: String
+  budget: Float
+  date: String
+  tag: String
+  description: String
+  isRequiredRiskAssessment: String
+  userID: ID! @index(name: "byUser")
+  Expenses: [Expense] @hasMany(indexName: "byTrip", fields: ["id"])
+  Notes: [Note] @hasMany(indexName: "byTrip", fields: ["id"])
+}
+
+type User @model @auth(rules: [{allow: public}]) {
+  id: ID!
+  name: String
+  email: String
+  Trips: [Trip] @hasMany(indexName: "byUser", fields: ["id"])
+} 

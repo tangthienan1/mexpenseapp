@@ -12,6 +12,38 @@
       "AmplifyAppId": "d1er1vkydjb1fi"
     }
   },
+  "api": {
+    "MExpenseOfficial": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AWS_IAM"
+            }
+          ],
+          "defaultAuthentication": {
+            "authenticationType": "API_KEY",
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 30,
+              "description": "api key description"
+            }
+          }
+        },
+        "GraphQLAPIIdOutput": "xqu4aq5qfbcpbhbcf7y5kmkacq",
+        "GraphQLAPIEndpointOutput": "https://3fof4gyqivgztbbdwljuhsts3a.appsync-api.ap-southeast-1.amazonaws.com/graphql",
+        "GraphQLAPIKeyOutput": "da2-64h7qrcgy5gqpl3w7xnklijj7q"
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync",
+      "lastPushTimeStamp": "2023-04-13T04:33:54.880Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-mexpenseofficial-staging-21821-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "logicalId": "apiMExpenseOfficial"
+      },
+      "lastPushDirHash": "tkCfl0hpA1WSBxbWHgu6sPtU35s="
+    }
+  },
   "auth": {
     "MExpenseOfficial": {
       "customAuth": false,
@@ -45,12 +77,11 @@
         "IdentityPoolName": "testAuthIdentityPool__staging",
         "UserPoolName": "MExpenseOfficial"
       },
-      "lastPushTimeStamp": "2023-04-11T04:45:13.574Z",
+      "lastPushTimeStamp": "2023-04-13T04:33:54.881Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-mexpenseofficial-staging-21821-deployment/amplify-cfn-templates/auth/MExpenseOfficial-cloudformation-template.json",
         "logicalId": "authMExpenseOfficial"
-      },
-      "lastPushDirHash": "yp7s/MbYkdMJ1D4g8Es7+rgfJqM="
+      }
     }
   }
 }
