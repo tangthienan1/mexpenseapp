@@ -24,7 +24,7 @@ type Trip @model @auth(rules: [{allow: public}]) {
   date: String
   tag: String
   description: String
-  isRequiredRiskAssessment: String
+  isRequiredRiskAssessment: Boolean
   userID: ID! @index(name: "byUser")
   Expenses: [Expense] @hasMany(indexName: "byTrip", fields: ["id"])
   Notes: [Note] @hasMany(indexName: "byTrip", fields: ["id"])

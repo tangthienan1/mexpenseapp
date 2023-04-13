@@ -90,7 +90,7 @@ type EagerTrip = {
   readonly date?: string | null;
   readonly tag?: string | null;
   readonly description?: string | null;
-  readonly isRequiredRiskAssessment?: string | null;
+  readonly isRequiredRiskAssessment?: boolean | null;
   readonly userID: string;
   readonly Expenses?: (Expense | null)[] | null;
   readonly Notes?: (Note | null)[] | null;
@@ -110,7 +110,7 @@ type LazyTrip = {
   readonly date?: string | null;
   readonly tag?: string | null;
   readonly description?: string | null;
-  readonly isRequiredRiskAssessment?: string | null;
+  readonly isRequiredRiskAssessment?: boolean | null;
   readonly userID: string;
   readonly Expenses: AsyncCollection<Expense>;
   readonly Notes: AsyncCollection<Note>;

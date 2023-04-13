@@ -247,7 +247,7 @@ export const schema = {
                 "isRequiredRiskAssessment": {
                     "name": "isRequiredRiskAssessment",
                     "isArray": false,
-                    "type": "String",
+                    "type": "Boolean",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -434,5 +434,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.0",
-    "version": "3498f708108d186c11b13bf96d0bf55f"
+    "version": "1f9473e44358d485028f0ae1b703d88b"
 };
