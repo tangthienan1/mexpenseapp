@@ -13,8 +13,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import ErrorText from '../../components/Text';
-import { MCOLORS, MFONTS, MSIZES, SIGNUP_SCREEN, icons } from '../../consts';
-import { FORGOTPASSWORD_SCREEN } from '../../consts/screenName';
+import { FORGOTPASSWORD_SCREEN, MCOLORS, MFONTS, MSIZES, SIGNUP_SCREEN, icons } from '../../consts';
 
 type LoginProps = {
     navigation: any;

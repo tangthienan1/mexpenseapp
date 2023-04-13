@@ -12,9 +12,8 @@ import {
     View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import { LOGIN_SCREEN, MCOLORS, MFONTS, MSIZES, icons } from '../../consts';
 import ErrorText from '../../components/Text';
-import { NEWPASSWORD_SCREEN } from '../../consts/screenName';
+import { LOGIN_SCREEN, MCOLORS, MFONTS, MSIZES, NEWPASSWORD_SCREEN, icons } from '../../consts';
 
 type ForgotPasswordProps = {
     navigation: any;

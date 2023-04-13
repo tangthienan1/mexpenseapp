@@ -3,11 +3,7 @@ import React, { FC } from 'react';
 import { GestureResponderEvent, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { icons, MCOLORS } from '../consts';
-import Account from '../screens/Account';
-import HomeScreen from '../screens/HomeScreen';
-import NewTrip from '../screens/NewTrip';
-import Note from '../screens/Note';
-import TripList from '../screens/TripList';
+import { Account, HomeScreen, NewTrip, Note, TripList } from '../screens';
 
 const Tab = createBottomTabNavigator();
 

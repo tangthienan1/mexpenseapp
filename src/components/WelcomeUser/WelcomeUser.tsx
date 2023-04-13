@@ -1,21 +1,40 @@
 import React, { FC } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { ACCOUNT_SCREEN, icons, MFONTS, MSIZES } from '../../consts';
+import { useSharedState } from '../../contexts';
 
 type WelcomeUserProps = {
     navigation: any;
-}
+    avatar?: any;
+    toolIcon?: any;
+    toolSourceNavigate?: string;
+};
 
-const WelcomeUser: FC<WelcomeUserProps> = ({ navigation }) => {
-    const tempUserName = "Andy"
+const WelcomeUser: FC<WelcomeUserProps> = ({
+    navigation,
+    avatar,
+    toolIcon,
+    toolSourceNavigate,
+}) => {
+    const { user } = useSharedState();
+    const userName = user?.attributes?.name;
     return (
-        <TouchableOpacity
-            onPress={() => navigation.navigate(ACCOUNT_SCREEN)}
-            style={styles.WelcomeUserWrapper}
-        >
-            <Image style={styles.img} source={icons.emptyAvatar} />
-            <Text style={{ ...MFONTS.body2, marginHorizontal: MSIZES.padding }}>Hi {tempUserName}!</Text>
-        </TouchableOpacity>
+        <View style={styles.WelcomeUserWrapper}>
+            <TouchableOpacity
+                style={styles.account}
+                onPress={() => navigation.navigate(ACCOUNT_SCREEN)}
+            >
+                <Image style={styles.img} source={avatar || icons.emptyAvatar} />
+                <Text style={{ ...MFONTS.body2, marginHorizontal: MSIZES.padding }}>
+                    Hi {userName}!
+                </Text>
+            </TouchableOpacity>
+            {toolIcon && (
+                <TouchableOpacity onPress={() => navigation.navigate(toolSourceNavigate)}>
+                    <Image style={styles.img} source={toolIcon} />
+                </TouchableOpacity>
+            )}
+        </View>
     );
 };
 
@@ -26,6 +45,11 @@ const styles = StyleSheet.create({
         height: 32,
     },
     WelcomeUserWrapper: {
+        width: '100%',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    account: {
         flexDirection: 'row',
     },
 });

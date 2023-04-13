@@ -22,6 +22,7 @@ const expenses = require('../assets/icons/expenses.png');
 const budget = require('../assets/icons/budget.png');
 const bublenote = require('../assets/icons/bublenote.png');
 const back = require('../assets/icons/back.png');
+const addnote = require('../assets/icons/addnote.png');
 
 export default {
     alarm,
@@ -47,5 +48,6 @@ export default {
     expenses,
     budget,
     bublenote,
+    addnote,
     back,
 };

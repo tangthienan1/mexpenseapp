@@ -10,11 +10,11 @@ import SaveBtn from '../../components/SaveBtn';
 import { CustomTextInput, TextField } from '../../components/TextInput';
 import { GlobalFormatDate, LOGIN_SCREEN, MCOLORS, MSIZES, icons } from '../../consts';
 
-type AddExpenseProps = {
+type AddNoteProps = {
     navigation: any;
 };
 
-const AddExpense: FC<AddExpenseProps> = ({ navigation }) => {
+const AddNote: FC<AddNoteProps> = ({ navigation }) => {
     const [open, setOpen] = useState<boolean>(false);
     const [amount, setAmount] = useState<number | undefined>();
     const [type, setType] = useState<string | undefined>();
@@ -82,7 +82,7 @@ const AddExpense: FC<AddExpenseProps> = ({ navigation }) => {
     );
 };
 
-export default AddExpense;
+export default AddNote;
 
 const styles = StyleSheet.create({
     ADDEXPENSE_SCREEN: {

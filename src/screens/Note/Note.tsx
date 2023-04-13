@@ -12,7 +12,7 @@ import {
 } from 'react-native';
 import Layout from '../../components/Layout';
 import WelcomeUser from '../../components/WelcomeUser';
-import { icons, MCOLORS, MFONTS, MSIZES } from '../../consts';
+import { ADDNOTE_SCREEN, MCOLORS, MFONTS, MSIZES, icons } from '../../consts';
 import { NoteItemType } from '../../type';
 
 const Notes = [
@@ -46,7 +46,7 @@ type NoteProps = {
     navigation: any;
 };
 
-const Note:FC<NoteProps> = ({ navigation }) => {
+const Note: FC<NoteProps> = ({ navigation }) => {
     const [filteredNoteList, setFilterNoteList] = useState<NoteItemType[]>(Notes);
     const searchTextRef = useRef('');
 
@@ -66,7 +66,11 @@ const Note:FC<NoteProps> = ({ navigation }) => {
     const Header = () => {
         return (
             <View style={styles.headerWrapper}>
-                <WelcomeUser navigation={navigation} />
+                <WelcomeUser
+                    navigation={navigation}
+                    toolIcon={icons.addnote}
+                    toolSourceNavigate={ADDNOTE_SCREEN}
+                />
             </View>
         );
     };
