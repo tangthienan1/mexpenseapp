@@ -22,6 +22,7 @@ import {
 } from '../../consts';
 import { HomeEntriesItemProps, TripType } from '../../type/type';
 import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native';
+import { NEWTRIP_SCREEN } from '../../consts/screenName';
 
 type RouteParamProps = {
     trip: TripType;
@@ -38,7 +39,6 @@ type HomeScreenProps = {
 const Home: FC<HomeScreenProps> = ({ navigation }) => {
     const route = useRoute<HomeRouteProp>();
     const tripData = route.params.trip;
-
     const expenses = [
         {
             type: 'Move',
@@ -192,12 +192,14 @@ const Home: FC<HomeScreenProps> = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
                 <View style={{ marginBottom: MSIZES.padding }}>
-                    <TripSummary
-                        tripName={tripData.tripName}
-                        date={tripData.date}
-                        tag={tripData.tag}
-                        isRequiredRiskAssessment={tripData.isRequiredRiskAssessment}
-                    />
+                    <TouchableOpacity onPress={() => navigation.navigate(NEWTRIP_SCREEN)}>
+                        <TripSummary
+                            tripName={tripData.tripName}
+                            date={tripData.date}
+                            tag={tripData.tag}
+                            isRequiredRiskAssessment={tripData.isRequiredRiskAssessment}
+                        />
+                    </TouchableOpacity>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
                     <TouchableOpacity

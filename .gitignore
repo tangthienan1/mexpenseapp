@@ -83,3 +83,6 @@ node_modules/
 .secret-*
 **.sample
 #amplify-do-not-edit-end
+ios/mexpenseapp.xcodeproj/project.pbxproj
+ios/mexpenseapp.xcworkspace/xcshareddata/IDEWorkspaceChecks.plist
+ios/mexpenseapp.xcodeproj/project.pbxproj
