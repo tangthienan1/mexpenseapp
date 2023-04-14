@@ -1,6 +1,7 @@
 /* eslint-disable react-native/no-inline-styles */
+import { API, Hub, graphqlOperation } from 'aws-amplify';
 import moment from 'moment';
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState } from 'react';
 import {
     Alert,
     Image,
@@ -19,12 +20,12 @@ import SaveBtn from '../../components/SaveBtn';
 import SelectDropDown from '../../components/SelectDropDown';
 import { CustomTextInput, TextField } from '../../components/TextInput';
 import WelcomeUser from '../../components/WelcomeUser';
-import { GlobalFormatDate, icons, MCOLORS, MFONTS, MSIZES, TRIPLIST_SCREEN } from '../../consts';
-import { useSharedState } from '../../contexts';
-import { TagType } from '../../type/type';
-import { API, graphqlOperation } from 'aws-amplify';
-import { createTrip } from '../../graphql/mutations';
+import { GlobalFormatDate, MCOLORS, MFONTS, MSIZES, TRIPLIST_SCREEN, icons } from '../../consts';
 import { TagOptions } from '../../consts/common';
+import { useSharedState } from '../../contexts';
+import { createTrip } from '../../graphql/mutations';
+import { TagType } from '../../type/type';
+import { NEWTRIP_SCREEN } from '../../consts/screenName';
 
 type NewTripProps = {
     navigation: any;
@@ -36,7 +37,7 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
     const [destination, setDestination] = useState<string | undefined>();
     const [budget, setBudget] = useState<number | undefined>();
     const [date, setDate] = useState<any>(new Date());
-    const [tag, setTag] = useState<TagType | undefined>();
+    const [tag, setTag] = useState<TagType | undefined>(TagType.PERSONAL);
     const [description, setDescription] = useState<string | undefined>();
     const [isRequiredRiskAssessment, setIsRequiredRiskAssessment] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -51,7 +52,10 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
         setIsLoading(true);
 
         try {
-            const newTrip = {
+            Hub.dispatch(NEWTRIP_SCREEN, {
+                event: 'addTrip',
+            });
+            const newTripObj = {
                 tripName,
                 destination,
                 budget,
@@ -61,8 +65,8 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                 isRequiredRiskAssessment,
                 userID: userData?.id,
             };
-            await API.graphql(graphqlOperation(createTrip, { input: newTrip }));
-            navigation.navigate(TRIPLIST_SCREEN)
+            await API.graphql(graphqlOperation(createTrip, { input: newTripObj }));
+            navigation.navigate(TRIPLIST_SCREEN);
         } catch (e) {
             Alert.alert((e as any).message);
         }
@@ -100,6 +104,7 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                             <View style={{ flex: 1, marginRight: MSIZES.padding }}>
                                 <InputTitle title="Budget" />
                                 <InputWithIcon
+                                    keyboardType="numeric"
                                     onChangeText={(text) => setBudget(+text)}
                                     icon={<Image source={icons.dollar} />}
                                 />

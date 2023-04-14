@@ -25,14 +25,6 @@ const ManageApp: FC<ManageAppProps> = ({ user }) => {
             updateSharedState({ userData });
         };
 
-        const getTripListData = async () => {
-            const resp: any = await API.graphql(
-                graphqlOperation(tripsByUserID, { userID: user.attributes.sub })
-            );
-            updateSharedState({ tripList: resp.data.tripsByUserID.items });
-        };
-
-        getTripListData();
         getUserDataOnDB();
     }, [user]);
 

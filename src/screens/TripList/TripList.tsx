@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, { FC, useEffect, useRef, useState } from 'react';
 import {
     FlatList,
@@ -14,21 +13,35 @@ import TripSummary from '../../components/TripSummary';
 import WelcomeUser from '../../components/WelcomeUser';
 import { MCOLORS, MSIZES, icons } from '../../consts';
 import { useSharedState } from '../../contexts';
-import { TripType } from '../../type/type';
-import { HOME_SCREEN } from '../../consts/screenName';
+import { HubPayload, TripType } from '../../type/type';
+import { HOME_SCREEN, NEWTRIP_SCREEN } from '../../consts/screenName';
+import { API, Hub, graphqlOperation } from 'aws-amplify';
+import { tripsByUserID } from '../../graphql/queries';
 
 type TripListProps = {
     navigation: any;
 };
 
 const TripList: FC<TripListProps> = ({ navigation }) => {
-    const { tripList } = useSharedState();
+    const { userData } = useSharedState();
+    const [tripList, setTripList] = useState<TripType[]>();
     const [filteredTripList, setFilterTripList] = useState<TripType[] | undefined>();
     const searchTextRef = useRef('');
 
     useEffect(() => {
-        setFilterTripList(tripList);
-    }, [tripList]);
+        const getTripListData = async () => {
+            const resp: any = await API.graphql(
+                graphqlOperation(tripsByUserID, { userID: userData?.id }) // even use "?" but it will never be undefined when user pass login
+            );
+            setTripList(resp.data.tripsByUserID.items);
+            setFilterTripList(resp.data.tripsByUserID.items);
+        };
+
+        getTripListData();
+        const hubListenerCancelToken = Hub.listen(NEWTRIP_SCREEN, () => getTripListData());
+
+        return () => hubListenerCancelToken();
+    }, [userData]);
 
     const handleSearchPress = () => {
         if (searchTextRef.current) {
