@@ -34,7 +34,7 @@ export type TripType = {
     tripName: string;
     destination: string;
     budget?: number;
-    date: string;
+    date: Date;
     tag: TagType;
     description?: string;
     isRequiredRiskAssessment: boolean;

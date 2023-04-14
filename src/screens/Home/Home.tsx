@@ -38,18 +38,7 @@ type HomeScreenProps = {
 
 const Home: FC<HomeScreenProps> = ({ navigation }) => {
     const route = useRoute<HomeRouteProp>();
-    // const tripData = route.params.trip;
-    // console.log({ tripData });
-    // const tripData = route.params.trip;
-    const tripData = {
-        tripName: 'Temp trip name',
-        destination: 'temp trip destination',
-        budget: '123111',
-        date: 'tempDate',
-        tag: 'dfa',
-        description: 'test description',
-        requiredRiskAssessment: true,
-    };
+    const tripData = route.params.trip;
     const expenses = [
         {
             type: 'Move',
@@ -206,9 +195,9 @@ const Home: FC<HomeScreenProps> = ({ navigation }) => {
                     <TouchableOpacity onPress={() => navigation.navigate(NEWTRIP_SCREEN)}>
                         <TripSummary
                             tripName={tripData.tripName}
-                            date="14 - oct - 2022"
-                            tag="Business"
-                            isRequiredRiskAssessment={true}
+                            date={tripData.date}
+                            tag={tripData.tag}
+                            isRequiredRiskAssessment={tripData.isRequiredRiskAssessment}
                         />
                     </TouchableOpacity>
                 </View>

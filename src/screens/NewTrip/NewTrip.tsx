@@ -1,7 +1,7 @@
-/* eslint-disable react-native/no-inline-styles */
 import { API, Hub, graphqlOperation } from 'aws-amplify';
 import moment from 'moment';
-import React, { FC, useState, useEffect } from 'react';
+import React, { FC, useState } from 'react';
+import { Controller, SubmitErrorHandler, useForm } from 'react-hook-form';
 import {
     Alert,
     Image,
@@ -13,7 +13,6 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
-import { Controller, useForm, SubmitErrorHandler } from 'react-hook-form';
 
 import CustomDatePicker from '../../components/CustomDatePicker';
 import InputTitle from '../../components/InputTitle';
@@ -24,10 +23,10 @@ import { CustomTextInput, TextField } from '../../components/TextInput';
 import WelcomeUser from '../../components/WelcomeUser';
 import { GlobalFormatDate, MCOLORS, MFONTS, MSIZES, TRIPLIST_SCREEN, icons } from '../../consts';
 import { TagOptions } from '../../consts/common';
+import { NEWTRIP_SCREEN } from '../../consts/screenName';
 import { useSharedState } from '../../contexts';
 import { createTrip } from '../../graphql/mutations';
 import { TagType } from '../../type/type';
-import { NEWTRIP_SCREEN } from '../../consts/screenName';
 
 type NewTripProps = {
     navigation: any;
@@ -57,6 +56,11 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
     const [date, setDate] = useState<any>(new Date());
 
     const handleOnSave = async (data: TFormTrip) => {
+        if (isLoading) {
+            return;
+        }
+
+        setIsLoading(true);
         try {
             Hub.dispatch(NEWTRIP_SCREEN, {
                 event: 'addTrip',

@@ -7,7 +7,7 @@ import { DisplayFormatDate } from '../../consts/common';
 
 type TripSummaryProps = {
     tripName: string;
-    date: string;
+    date: Date;
     tag: string;
     isRequiredRiskAssessment: boolean;
 };
