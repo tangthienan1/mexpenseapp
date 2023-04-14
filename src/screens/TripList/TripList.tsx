@@ -10,7 +10,7 @@ import {
     View,
 } from 'react-native';
 import Layout from '../../components/Layout';
-import TripSummary, { TripSummaryProps } from '../../components/TripSummary';
+import TripSummary from '../../components/TripSummary';
 import WelcomeUser from '../../components/WelcomeUser';
 import { icons, MCOLORS, MSIZES } from '../../consts';
 
@@ -18,25 +18,25 @@ const Trips = [
     {
         tripName: "Meeting Mr Cock (Apple's CEO)",
         date: '14 - oct - 2022',
-        tag: 'Business',
+        tag: 'business',
         isRequiredRiskAssessment: true,
     },
     {
         tripName: 'Cultural Training',
         date: '14 - oct - 2022',
-        tag: 'Business',
+        tag: 'business',
         isRequiredRiskAssessment: true,
     },
     {
         tripName: "Meeting Mr Cock (Apple's CEO)",
         date: '14 - oct - 2022',
-        tag: 'Family',
+        tag: 'family',
         isRequiredRiskAssessment: true,
     },
     {
         tripName: "Meeting Mr Cock (Apple's CEO)",
         date: '14 - oct - 2022',
-        tag: 'Personal',
+        tag: 'personal',
         isRequiredRiskAssessment: false,
     },
 ];
@@ -46,7 +46,7 @@ type TripListProps = {
 };
 
 const TripList:FC<TripListProps> = ({ navigation }) => {
-    const [filteredTripList, setFilterTripList] = useState<TripSummaryProps[]>(Trips);
+    const [filteredTripList, setFilterTripList] = useState<any[]>(Trips);
     const searchTextRef = useRef('');
 
     const Header = () => {
@@ -88,7 +88,7 @@ const TripList:FC<TripListProps> = ({ navigation }) => {
             </View>
         );
     };
-    const renderItem: ListRenderItem<TripSummaryProps> = ({ item }) => {
+    const renderItem: ListRenderItem<any> = ({ item }) => {
         return (
             <TouchableOpacity>
                 <TripSummary

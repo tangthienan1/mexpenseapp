@@ -1,6 +1,6 @@
 export const GlobalFormatDate = 'DD/MM/YYYY';
 
-export const Tags = [
+export const TagOptions = [
     {
         value: 'Business',
         key: 'business',

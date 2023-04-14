@@ -19,12 +19,12 @@ import SaveBtn from '../../components/SaveBtn';
 import SelectDropDown from '../../components/SelectDropDown';
 import { CustomTextInput, TextField } from '../../components/TextInput';
 import WelcomeUser from '../../components/WelcomeUser';
-import { GlobalFormatDate, icons, MCOLORS, MFONTS, MSIZES } from '../../consts';
+import { GlobalFormatDate, icons, MCOLORS, MFONTS, MSIZES, TRIPLIST_SCREEN } from '../../consts';
 import { useSharedState } from '../../contexts';
 import { TagType } from '../../type/type';
 import { API, graphqlOperation } from 'aws-amplify';
 import { createTrip } from '../../graphql/mutations';
-import { Tags } from '../../consts/util';
+import { TagOptions } from '../../consts/common';
 
 type NewTripProps = {
     navigation: any;
@@ -40,16 +40,6 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
     const [description, setDescription] = useState<string | undefined>();
     const [isRequiredRiskAssessment, setIsRequiredRiskAssessment] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
-
-    console.log('newTripData', {
-        tripName,
-        destination,
-        budget,
-        date,
-        tag,
-        description,
-        isRequiredRiskAssessment,
-    });
 
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
@@ -67,13 +57,15 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                 tag,
                 description,
                 isRequiredRiskAssessment,
-                userId: userData.id,
+                userID: userData.id,
             };
             const addedTrip = await API.graphql(graphqlOperation(createTrip, { input: newTrip }));
-            console.log('Trip added obj', newTrip);
+
             console.log('Trip added', addedTrip);
+
+            navigation.navigate(TRIPLIST_SCREEN)
+
         } catch (e) {
-            console.log('testtttt', (e as any).message)
             Alert.alert((e as any).message);
         }
         setIsLoading(false);
@@ -129,7 +121,7 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                         </View>
 
                         <Text style={styles.inputTile}>Tag</Text>
-                        <SelectDropDown setSelected={setTag} data={Tags} />
+                        <SelectDropDown setSelected={setTag} data={TagOptions} />
 
                         <Text style={styles.inputTile}>Description</Text>
                         <TextField onChangeText={(text) => setDescription(text)} />

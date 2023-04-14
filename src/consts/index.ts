@@ -12,7 +12,7 @@ import {
     NEWPASSWORD_SCREEN,
 } from './screenName';
 import theme, { MCOLORS, MFONTS, MSIZES } from './theme';
-import { GlobalFormatDate } from './util';
+import { GlobalFormatDate } from './common';
 
 export {
     icons,

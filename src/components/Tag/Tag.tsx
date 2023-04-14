@@ -1,6 +1,7 @@
 import React, { FC } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { MCOLORS, MFONTS, MSIZES } from '../../consts';
+import { capitalizeFirstLetter } from '../../util';
 
 type TagProps = {
     tag: string;
@@ -9,28 +10,28 @@ type TagProps = {
 const Tag: FC<TagProps> = ({ tag }) => {
     const getBackgroundColor = () => {
         switch (tag) {
-            case 'Business':
+            case 'business':
                 return MCOLORS.blue;
-            case 'Family':
+            case 'family':
                 return MCOLORS.yellow;
-            case 'Personal':
+            case 'personal':
                 return MCOLORS.red;
         }
     };
     const getDotColor = () => {
         switch (tag) {
-            case 'Business':
+            case 'business':
                 return MCOLORS.emerald;
-            case 'Family':
+            case 'family':
                 return MCOLORS.blue;
-            case 'Personal':
+            case 'personal':
                 return MCOLORS.white;
         }
     };
     return (
         <View style={[styles.tagWrapper, { backgroundColor: getBackgroundColor() }]}>
             <View style={[styles.dot, { backgroundColor: getDotColor() }]} />
-            <Text style={{ ...MFONTS.body4, color: MCOLORS.white }}>{tag}</Text>
+            <Text style={{ ...MFONTS.body4, color: MCOLORS.white }}>{capitalizeFirstLetter(tag)}</Text>
         </View>
     );
 };

@@ -3,7 +3,7 @@ import React, { FC, useState } from 'react';
 import { icons, MCOLORS, MFONTS, MSIZES } from '../../consts';
 import Tag from '../Tag/Tag';
 
-export type TripSummaryProps = {
+type TripSummaryProps = {
     tripName: string;
     date: string;
     tag: string;
