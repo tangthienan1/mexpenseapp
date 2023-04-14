@@ -111,12 +111,13 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                             render={({ field: { onChange, value } }) => (
                                 <View>
                                     <Text style={styles.inputTile}>Trip name</Text>
-                                    <CustomTextInput onChangeText={onChange} value={value} />
-                                    {errors.tripName && (
-                                        <Text style={errors.tripName && styles.errorField}>
-                                            {errors.tripName?.message}
-                                        </Text>
-                                    )}
+                                    <CustomTextInput
+                                        onChangeText={onChange}
+                                        value={value}
+                                        textError={
+                                            errors.tripName ? errors.destination?.message : ''
+                                        }
+                                    />
                                 </View>
                             )}
                             name="tripName"
@@ -129,12 +130,13 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                             render={({ field: { onChange, value } }) => (
                                 <View>
                                     <Text style={styles.inputTile}>Destination</Text>
-                                    <CustomTextInput onChangeText={onChange} value={value} />
-                                    {errors.tripName && (
-                                        <Text style={errors.tripName && styles.errorField}>
-                                            {errors.destination?.message}
-                                        </Text>
-                                    )}
+                                    <CustomTextInput
+                                        onChangeText={onChange}
+                                        value={value}
+                                        textError={
+                                            errors.tripName ? errors.destination?.message : ''
+                                        }
+                                    />
                                 </View>
                             )}
                             name="destination"
