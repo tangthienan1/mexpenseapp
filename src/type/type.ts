@@ -37,7 +37,7 @@ export type TripType = {
     date: string;
     tag: TagType;
     description?: string;
-    isRequiredRiskAssessment: RequiredRiskAssessmentType;
+    isRequiredRiskAssessment: boolean;
     userID?: string;
 };
 
@@ -45,11 +45,6 @@ export enum TagType {
     BUSINESS = 'business',
     FAMILY = 'family',
     PERSONAL = 'personal',
-}
-
-export enum RequiredRiskAssessmentType {
-    TRUE = 1,
-    FALSE = 0,
 }
 
 export type HubPayload = {

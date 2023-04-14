@@ -65,6 +65,7 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                 ...data,
                 userID: userData?.id,
             };
+            console.log({ newTripObj });
             await API.graphql(graphqlOperation(createTrip, { input: newTripObj }));
             reset();
             navigation.navigate(TRIPLIST_SCREEN);

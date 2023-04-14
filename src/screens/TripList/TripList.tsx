@@ -57,6 +57,7 @@ const TripList: FC<TripListProps> = ({ navigation }) => {
     };
 
     const handleTripItemPress = (trip: TripType) => {
+        console.log({ trip });
         navigation.navigate(HOME_SCREEN, { trip });
     };
 
