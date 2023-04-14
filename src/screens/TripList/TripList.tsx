@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import {
     FlatList,
     Image,
@@ -23,8 +23,12 @@ type TripListProps = {
 
 const TripList: FC<TripListProps> = ({ navigation }) => {
     const { tripList } = useSharedState();
-    const [filteredTripList, setFilterTripList] = useState<TripType[] | undefined>(tripList);
+    const [filteredTripList, setFilterTripList] = useState<TripType[] | undefined>();
     const searchTextRef = useRef('');
+
+    useEffect(() => {
+        setFilterTripList(tripList);
+    }, [tripList]);
 
     const handleSearchPress = () => {
         if (searchTextRef.current) {
