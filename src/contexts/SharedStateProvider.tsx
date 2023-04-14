@@ -2,7 +2,7 @@ import React, { FC, useContext, useState } from 'react';
 import { SharedState, SharedStateContext } from './SharedStateContext';
 
 type SharedStateProviderProps = {
-    initialState?: Pick<SharedState, 'userData' | 'currentTrip' | 'expenseList'>;
+    initialState?: Pick<SharedState, 'userData' | 'tripList' | 'currentTrip' | 'expenseList'>;
     children: any;
 };
 

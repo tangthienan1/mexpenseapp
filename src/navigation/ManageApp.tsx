@@ -5,7 +5,7 @@ import { useSharedState } from '../contexts';
 import Tabs from './tabs';
 import { AddExpense, AddNote } from '../screens';
 import { API, graphqlOperation } from 'aws-amplify';
-import { getUser } from '../graphql/queries';
+import { getUser, tripsByUserID } from '../graphql/queries';
 
 const Stack = createNativeStackNavigator();
 
@@ -24,7 +24,18 @@ const ManageApp: FC<ManageAppProps> = ({ user }) => {
             const userData = resp.data.getUser;
             updateSharedState({ userData });
         };
+
         getUserDataOnDB();
+    }, []);
+
+    useEffect(() => {
+        const getTripListData = async () => {
+            const resp: any = await API.graphql(
+                graphqlOperation(tripsByUserID, { userID: user.attributes.sub })
+            );
+            updateSharedState({ tripList: resp.data.tripsByUserID.items });
+        };
+        getTripListData();
     }, []);
 
     return (

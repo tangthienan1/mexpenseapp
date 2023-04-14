@@ -13,7 +13,7 @@ import {
 import Layout from '../../components/Layout';
 import WelcomeUser from '../../components/WelcomeUser';
 import { ADDNOTE_SCREEN, MCOLORS, MFONTS, MSIZES, icons } from '../../consts';
-import { NoteItemType } from '../../type/type';
+import { NoteType } from '../../type/type';
 
 const Notes = [
     {
@@ -47,7 +47,7 @@ type NoteProps = {
 };
 
 const Note: FC<NoteProps> = ({ navigation }) => {
-    const [filteredNoteList, setFilterNoteList] = useState<NoteItemType[]>(Notes);
+    const [filteredNoteList, setFilterNoteList] = useState<NoteType[]>(Notes);
     const searchTextRef = useRef('');
 
     const handleSearchPress = () => {
@@ -93,7 +93,7 @@ const Note: FC<NoteProps> = ({ navigation }) => {
             </View>
         );
     };
-    const renderItem: ListRenderItem<NoteItemType> = ({ item }) => {
+    const renderItem: ListRenderItem<NoteType> = ({ item }) => {
         return item ? (
             <View style={styles.noteItemWrapper}>
                 <Text style={{ ...MFONTS.h4, marginVertical: MSIZES.padding }}>{item.date}</Text>

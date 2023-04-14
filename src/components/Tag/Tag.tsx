@@ -2,6 +2,7 @@ import React, { FC } from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 import { MCOLORS, MFONTS, MSIZES } from '../../consts';
 import { capitalizeFirstLetter } from '../../util';
+import { TagType } from '../../type/type';
 
 type TagProps = {
     tag: string;
@@ -10,21 +11,21 @@ type TagProps = {
 const Tag: FC<TagProps> = ({ tag }) => {
     const getBackgroundColor = () => {
         switch (tag) {
-            case 'business':
+            case TagType.BUSINESS:
                 return MCOLORS.blue;
-            case 'family':
+            case TagType.FAMILY:
                 return MCOLORS.yellow;
-            case 'personal':
+            case TagType.PERSONAL:
                 return MCOLORS.red;
         }
     };
     const getDotColor = () => {
         switch (tag) {
-            case 'business':
+            case TagType.BUSINESS:
                 return MCOLORS.emerald;
-            case 'family':
+            case TagType.FAMILY:
                 return MCOLORS.blue;
-            case 'personal':
+            case TagType.PERSONAL:
                 return MCOLORS.white;
         }
     };

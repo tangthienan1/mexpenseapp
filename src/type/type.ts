@@ -5,29 +5,40 @@ export type HomeEntriesItemProps = {
 };
 
 export type UserDataType = {
-    createdAt: string;
-    email: string;
     id: string;
-    image: string;
     name: string;
+    email: string;
+    image: string;
+    createdAt: string;
     updatedAt: string;
 }
 
-export type NoteItemType = {
+export type NoteType = {
     date: string;
     title: string;
     content: string;
 };
 
+export type ExpenseType = {
+    id: string;
+    amount: number;
+    type: string;
+    location: string;
+    date: Date;
+    comment: string;
+    tripID: string;
+}
+
 export type TripType = {
-    name: string;
+    id: string;
+    tripName: string;
     destination: string;
     budget?: number;
     date: string;
     tag: TagType;
     description?: string;
-    requiredRiskAssessment: RequiredRiskAssessmentType;
-    userUID?: string;
+    isRequiredRiskAssessment: RequiredRiskAssessmentType;
+    userID?: string;
 };
 
 export enum TagType {

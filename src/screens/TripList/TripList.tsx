@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { FC, useRef, useState } from 'react';
+import React, { FC, useEffect, useRef, useState } from 'react';
 import {
     FlatList,
     Image,
@@ -13,64 +13,43 @@ import Layout from '../../components/Layout';
 import TripSummary from '../../components/TripSummary';
 import WelcomeUser from '../../components/WelcomeUser';
 import { icons, MCOLORS, MSIZES } from '../../consts';
-
-const Trips = [
-    {
-        tripName: "Meeting Mr Cock (Apple's CEO)",
-        date: '14 - oct - 2022',
-        tag: 'business',
-        isRequiredRiskAssessment: true,
-    },
-    {
-        tripName: 'Cultural Training',
-        date: '14 - oct - 2022',
-        tag: 'business',
-        isRequiredRiskAssessment: true,
-    },
-    {
-        tripName: "Meeting Mr Cock (Apple's CEO)",
-        date: '14 - oct - 2022',
-        tag: 'family',
-        isRequiredRiskAssessment: true,
-    },
-    {
-        tripName: "Meeting Mr Cock (Apple's CEO)",
-        date: '14 - oct - 2022',
-        tag: 'personal',
-        isRequiredRiskAssessment: false,
-    },
-];
+import { API, graphqlOperation } from 'aws-amplify';
+import { tripsByUserID } from '../../graphql/queries';
+import { useSharedState } from '../../contexts';
+import { TripType } from '../../type/type';
 
 type TripListProps = {
     navigation: any;
 };
 
-const TripList:FC<TripListProps> = ({ navigation }) => {
-    const [filteredTripList, setFilterTripList] = useState<any[]>(Trips);
+const TripList: FC<TripListProps> = ({ navigation }) => {
+    const { tripList } = useSharedState();
+    console.log({ tripList });
+    const [filteredTripList, setFilterTripList] = useState<TripType[]| undefined>(tripList);
     const searchTextRef = useRef('');
 
-    const Header = () => {
+    const handleSearchPress = () => {
+        if (searchTextRef.current) {
+            const newFilterTripList =
+                tripList &&
+                tripList.filter((tripItem) =>
+                    tripItem.tripName.toLowerCase().includes(searchTextRef.current.toLowerCase())
+                );
+            newFilterTripList && setFilterTripList(newFilterTripList);
+        } else {
+            setFilterTripList(tripList);
+        }
+    };
+
+    function Header() {
         return (
             <View style={styles.headerWrapper}>
                 <WelcomeUser navigation={navigation} />
             </View>
         );
-    };
+    }
 
-    const handleSearchPress = () => {
-        if (searchTextRef.current) {
-            const newFilterTripList =
-                Trips &&
-                Trips.filter((tripItem) =>
-                    tripItem.tripName.toLowerCase().includes(searchTextRef.current.toLowerCase())
-                );
-            newFilterTripList && setFilterTripList(newFilterTripList);
-        } else {
-            setFilterTripList(Trips);
-        }
-    };
-
-    const HeaderComponent = () => {
+    function SearchBar() {
         return (
             <View>
                 <Header />
@@ -87,8 +66,9 @@ const TripList:FC<TripListProps> = ({ navigation }) => {
                 </View>
             </View>
         );
-    };
-    const renderItem: ListRenderItem<any> = ({ item }) => {
+    }
+
+    const renderTripItem: ListRenderItem<any> = ({ item }) => {
         return (
             <TouchableOpacity>
                 <TripSummary
@@ -101,20 +81,20 @@ const TripList:FC<TripListProps> = ({ navigation }) => {
         );
     };
 
-    function renderNote() {
+    const renderNote = () => {
         return (
             <FlatList
-                ListHeaderComponent={HeaderComponent}
+                ListHeaderComponent={SearchBar}
                 contentContainerStyle={{ paddingHorizontal: MSIZES.padding * 3 }}
                 numColumns={1}
                 data={filteredTripList}
-                keyExtractor={(item, index) => `_key${index.toString()}`}
-                renderItem={renderItem}
+                keyExtractor={(_, index) => `_key${index.toString()}`}
+                renderItem={renderTripItem}
                 showsVerticalScrollIndicator={false}
                 ListFooterComponent={<View style={{ marginBottom: 80 }} />}
             />
         );
-    }
+    };
     return <Layout>{renderNote()}</Layout>;
 };
 

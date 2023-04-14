@@ -1,4 +1,5 @@
 export const GlobalFormatDate = 'DD/MM/YYYY';
+export const DisplayFormatDate = 'MMM Do YY';
 
 export const TagOptions = [
     {

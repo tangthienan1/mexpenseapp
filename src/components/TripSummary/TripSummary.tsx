@@ -2,6 +2,8 @@ import { Image, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } fro
 import React, { FC, useState } from 'react';
 import { icons, MCOLORS, MFONTS, MSIZES } from '../../consts';
 import Tag from '../Tag/Tag';
+import moment from 'moment';
+import { DisplayFormatDate } from '../../consts/common';
 
 type TripSummaryProps = {
     tripName: string;
@@ -39,7 +41,7 @@ const TripSummary: FC<TripSummaryProps> = ({ tripName, date, tag, isRequiredRisk
             </Modal>
             <Text style={{ ...MFONTS.body2, marginBottom: MSIZES.padding }}>{tripName}</Text>
             <View style={styles.contentWrapper}>
-                <Text style={styles.date}>Date: {date}</Text>
+                <Text style={styles.date}>Date: {moment(date).format(DisplayFormatDate)}</Text>
                 <Tag tag={tag} />
             </View>
             {isRequiredRiskAssessment && (
