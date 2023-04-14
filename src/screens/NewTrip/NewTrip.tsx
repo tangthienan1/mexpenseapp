@@ -49,15 +49,12 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
         handleSubmit,
         formState: { errors },
         clearErrors,
+        reset,
     } = useForm<TFormTrip | any>();
     const { userData } = useSharedState();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
     const [date, setDate] = useState<any>(new Date());
-
-    useEffect(() => {
-        clearErrors(['tripName']);
-    }, []);
 
     const handleOnSave = async (data: TFormTrip) => {
         try {
@@ -69,6 +66,7 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                 userID: userData?.id,
             };
             await API.graphql(graphqlOperation(createTrip, { input: newTripObj }));
+            reset();
             navigation.navigate(TRIPLIST_SCREEN);
         } catch (e) {
             Alert.alert((e as any).message);
@@ -226,53 +224,6 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                             name="isRequiredRiskAssessment"
                             // rules={{ required: true }}
                         />
-
-                        {/* <Text style={styles.inputTile}>Trip name</Text>
-                        <CustomTextInput onChangeText={(text) => setTripName(text)} />
-
-                        <Text style={styles.inputTile}>Destination</Text>
-                        <CustomTextInput onChangeText={(text) => setDestination(text)} />
-
-                        <View style={{ flexDirection: 'row' }}>
-                            <View style={{ flex: 1, marginRight: MSIZES.padding }}>
-                                <InputTitle title="Budget" />
-                                <InputWithIcon
-                                    keyboardType="numeric"
-                                    onChangeText={(text) => setBudget(+text)}
-                                    icon={<Image source={icons.dollar} />}
-                                />
-                            </View>
-
-                            <View style={{ flex: 1 }}>
-                                <InputTitle title="Date" />
-                                <TouchableOpacity onPress={() => setIsDatePickerOpen(true)}>
-                                    <InputWithIcon
-                                        editable={false}
-                                        defaultValue={moment(date)
-                                            .startOf('day')
-                                            .format(GlobalFormatDate)}
-                                        icon={<Image source={icons.date} />}
-                                    />
-                                </TouchableOpacity>
-                            </View>
-                        </View>
-
-                        <Text style={styles.inputTile}>Tag</Text>
-                        <SelectDropDown setSelected={setTag} data={TagOptions} />
-
-                        <Text style={styles.inputTile}>Description</Text>
-                        <TextField onChangeText={(text) => setDescription(text)} />
-
-                        <Text style={styles.inputTile}>Required Risk Assessment</Text>
-                        <View style={{ marginVertical: MSIZES.padding }}>
-                            <Switch
-                                trackColor={{ false: '#767577', true: MCOLORS.emerald }}
-                                thumbColor="#f4f3f4"
-                                ios_backgroundColor="#3e3e3e"
-                                onValueChange={() => setIsRequiredRiskAssessment((prev) => !prev)}
-                                value={isRequiredRiskAssessment}
-                            />
-                        </View> */}
 
                         <SaveBtn
                             isLoading={isLoading}
