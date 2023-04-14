@@ -22,6 +22,7 @@ import {
 } from '../../consts';
 import { HomeEntriesItemProps, TripType } from '../../type/type';
 import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native';
+import { NEWTRIP_SCREEN } from '../../consts/screenName';
 
 type RouteParamProps = {
     trip: TripType;
@@ -37,9 +38,19 @@ type HomeScreenProps = {
 
 const Home: FC<HomeScreenProps> = ({ navigation }) => {
     const route = useRoute<HomeRouteProp>();
-    const tripData = route.params.trip;
-    console.log({ tripData });
+    // const tripData = route.params.trip;
+    // console.log({ tripData });
     const totalExpense = 123456;
+
+    const tripData = {
+        tripName: 'Temp trip name',
+        destination: 'temp trip destination',
+        budget: '123111',
+        date: 'tempDate',
+        tag: 'dfa',
+        description: 'test description',
+        requiredRiskAssessment: true,
+    };
 
     const expenses = [
         {
@@ -185,12 +196,14 @@ const Home: FC<HomeScreenProps> = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
                 <View style={{ marginBottom: MSIZES.padding }}>
-                    <TripSummary
-                        tripName={tripData.tripName}
-                        date="14 - oct - 2022"
-                        tag="Business"
-                        isRequiredRiskAssessment={true}
-                    />
+                    <TouchableOpacity onPress={() => navigation.navigate(NEWTRIP_SCREEN)}>
+                        <TripSummary
+                            tripName={tripData.tripName}
+                            date="14 - oct - 2022"
+                            tag="Business"
+                            isRequiredRiskAssessment={true}
+                        />
+                    </TouchableOpacity>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
                     <TouchableOpacity

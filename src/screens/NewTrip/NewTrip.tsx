@@ -12,6 +12,8 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import { Controller, useForm, SubmitErrorHandler } from 'react-hook-form';
+
 import CustomDatePicker from '../../components/CustomDatePicker';
 import InputTitle from '../../components/InputTitle';
 import InputWithIcon from '../../components/InputWithIcon';
@@ -30,44 +32,59 @@ type NewTripProps = {
     navigation: any;
 };
 
+type TFormTrip = {
+    tripName: string;
+    destination: string;
+    budget: number;
+    date: Date;
+    tag: TagType;
+    description: string;
+};
+
 const NewTrip: FC<NewTripProps> = ({ navigation }) => {
-    const { userData } = useSharedState();
-    const [tripName, setTripName] = useState<string | undefined>();
-    const [destination, setDestination] = useState<string | undefined>();
-    const [budget, setBudget] = useState<number | undefined>();
+    const {
+        control,
+        handleSubmit,
+        formState: { errors },
+        clearErrors,
+    } = useForm<TFormTrip | any>();
+
     const [date, setDate] = useState<any>(new Date());
-    const [tag, setTag] = useState<TagType | undefined>();
-    const [description, setDescription] = useState<string | undefined>();
     const [isRequiredRiskAssessment, setIsRequiredRiskAssessment] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
-    const handleOnSave = async () => {
-        if (isLoading) {
-            return;
-        }
+    useEffect(() => {
+        clearErrors(['tripName']);
+    }, []);
 
-        setIsLoading(true);
-
-        try {
-            const newTrip = {
-                tripName,
-                destination,
-                budget,
-                date,
-                tag,
-                description,
-                isRequiredRiskAssessment,
-                userID: userData?.id,
-            };
-            await API.graphql(graphqlOperation(createTrip, { input: newTrip }));
-            navigation.navigate(TRIPLIST_SCREEN)
-        } catch (e) {
-            Alert.alert((e as any).message);
-        }
-
-        setIsLoading(false);
+    const handleOnSave = (data: TFormTrip) => {
+        console.log(data);
+        // if (isLoading) {
+        //     return;
+        // }
+        // setIsLoading(true);
+        // try {
+        //     const newTrip = {
+        //         tripName,
+        //         destination,
+        //         budget,
+        //         date,
+        //         tag,
+        //         description,
+        //         isRequiredRiskAssessment,
+        //         userID: userData?.id,
+        //     };
+        //     await API.graphql(graphqlOperation(createTrip, { input: newTrip }));
+        //     navigation.navigate(TRIPLIST_SCREEN);
+        // } catch (e) {
+        //     Alert.alert((e as any).message);
+        // }
+        // setIsLoading(false);
+    };
+    const onError: SubmitErrorHandler<TFormTrip> = (errors, e) => {
+        return console.log(errors);
     };
 
     return (
@@ -89,8 +106,133 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
 
                     <View style={styles.form}>
                         <Text style={{ ...MFONTS.body1, textAlign: 'center' }}>New Trip</Text>
+                        <Controller
+                            control={control}
+                            render={({ field: { onChange, value } }) => (
+                                <View>
+                                    <Text style={styles.inputTile}>Trip name</Text>
+                                    <CustomTextInput onChangeText={onChange} value={value} />
+                                    {errors.tripName && (
+                                        <Text style={errors.tripName && styles.errorField}>
+                                            {errors.tripName?.message}
+                                        </Text>
+                                    )}
+                                </View>
+                            )}
+                            name="tripName"
+                            rules={{
+                                required: { value: true, message: 'Field is required' },
+                            }}
+                        />
+                        <Controller
+                            control={control}
+                            render={({ field: { onChange, value } }) => (
+                                <View>
+                                    <Text style={styles.inputTile}>Destination</Text>
+                                    <CustomTextInput onChangeText={onChange} value={value} />
+                                    {errors.tripName && (
+                                        <Text style={errors.tripName && styles.errorField}>
+                                            {errors.destination?.message}
+                                        </Text>
+                                    )}
+                                </View>
+                            )}
+                            name="destination"
+                            rules={{
+                                required: { value: true, message: 'Field is required' },
+                            }}
+                        />
 
-                        <Text style={styles.inputTile}>Trip name</Text>
+                        <View style={{ flexDirection: 'row' }}>
+                            <View style={{ flex: 1, marginRight: MSIZES.padding }}>
+                                <Controller
+                                    control={control}
+                                    render={({ field: { onChange, value } }) => (
+                                        <View>
+                                            <InputTitle title="Budget" />
+                                            <InputWithIcon
+                                                value={value}
+                                                onChangeText={onChange}
+                                                icon={<Image source={icons.dollar} />}
+                                            />
+                                        </View>
+                                    )}
+                                    name="budget"
+                                    // rules={{
+                                    //     required: { value: true, message: 'Field is required' },
+                                    // }}
+                                />
+                            </View>
+
+                            <View style={{ flex: 1 }}>
+                                <Controller
+                                    control={control}
+                                    render={({ field: { onChange, value } }) => (
+                                        <View>
+                                            <TouchableOpacity
+                                                onPress={() => setIsDatePickerOpen(true)}
+                                            >
+                                                <InputTitle title="Date" />
+                                                <InputWithIcon
+                                                    editable={false}
+                                                    defaultValue={moment(date)
+                                                        .startOf('day')
+                                                        .format(GlobalFormatDate)}
+                                                    icon={<Image source={icons.date} />}
+                                                />
+                                            </TouchableOpacity>
+                                        </View>
+                                    )}
+                                    name="date"
+                                    // rules={{ required: true }}
+                                />
+                            </View>
+                        </View>
+                        <Controller
+                            control={control}
+                            render={({ field: { value, onChange } }) => (
+                                <View>
+                                    <Text style={styles.inputTile}>Tag</Text>
+                                    <SelectDropDown setSelected={onChange} data={TagOptions} />
+                                </View>
+                            )}
+                            name="tag"
+                            // rules={{ required: true }}
+                        />
+                        <Controller
+                            control={control}
+                            render={({ field: { value, onChange } }) => (
+                                <View>
+                                    <Text style={styles.inputTile}>Destination</Text>
+                                    <TextField value={value} onChangeText={onChange} />
+                                </View>
+                            )}
+                            name="description"
+                            // rules={{ required: true }}
+                        />
+                        <Controller
+                            control={control}
+                            render={({ field: { value, onChange } }) => (
+                                <View>
+                                    <Text style={styles.inputTile}>Required Risk Assessment</Text>
+                                    <View style={{ marginVertical: MSIZES.padding }}>
+                                        <Switch
+                                            trackColor={{ false: '#767577', true: MCOLORS.emerald }}
+                                            thumbColor="#f4f3f4"
+                                            ios_backgroundColor="#3e3e3e"
+                                            onValueChange={() =>
+                                                setIsRequiredRiskAssessment((prev) => !prev)
+                                            }
+                                            value={isRequiredRiskAssessment}
+                                        />
+                                    </View>
+                                </View>
+                            )}
+                            name="description"
+                            // rules={{ required: true }}
+                        />
+
+                        {/* <Text style={styles.inputTile}>Trip name</Text>
                         <CustomTextInput onChangeText={(text) => setTripName(text)} />
 
                         <Text style={styles.inputTile}>Destination</Text>
@@ -134,9 +276,12 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                                 onValueChange={() => setIsRequiredRiskAssessment((prev) => !prev)}
                                 value={isRequiredRiskAssessment}
                             />
-                        </View>
+                        </View> */}
 
-                        <SaveBtn isLoading={isLoading} onPress={handleOnSave} />
+                        <SaveBtn
+                            isLoading={isLoading}
+                            onPress={handleSubmit(handleOnSave, onError)}
+                        />
                     </View>
                 </View>
             </ScrollView>
@@ -166,6 +311,9 @@ const styles = StyleSheet.create({
     inputTile: {
         marginTop: MSIZES.padding,
         ...MFONTS.body3,
+    },
+    errorField: {
+        color: MCOLORS.red,
     },
     inputWithIcon: {
         flexDirection: 'row',
