@@ -2,13 +2,16 @@ import React, { FC } from 'react';
 import { StyleSheet, TextInput, TextInputProps, View, Text } from 'react-native';
 import { MCOLORS, MSIZES } from '../../consts';
 
-export const TextField: FC<{ height?: number } & TextInputProps> = (props) => {
+export const TextField: FC<{ textError?: any; height?: number } & TextInputProps> = (props) => {
     return (
-        <TextInput
-            multiline
-            style={[styles.textInput, { height: props.height || 80 }]}
-            {...props}
-        />
+        <View>
+            <TextInput
+                multiline
+                style={[styles.textInput, { height: props.height || 80 }]}
+                {...props}
+            />
+            {props.textError && <Text style={styles.errorField}>{props.textError}</Text>}
+        </View>
     );
 };
 

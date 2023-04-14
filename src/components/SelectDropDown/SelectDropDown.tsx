@@ -23,6 +23,8 @@ type SelectDropDownProps = {
     data: Array<DataType>;
     defaultOption?: { key: any; value: any };
     onSelect?: () => void;
+    textError?: any;
+    value?: string;
 };
 
 const SelectDropDown: FC<SelectDropDownProps> = ({
@@ -32,6 +34,8 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
     data,
     defaultOption,
     onSelect = () => {},
+    textError,
+    value,
 }) => {
     const oldOption = useRef(null);
     const [_firstRender, _setFirstRender] = useState<boolean>(true);
@@ -66,6 +70,10 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
     useEffect(() => {
         setFilteredData(data);
     }, [data]);
+
+    useEffect(() => {
+        setSelectedVal(data.find((item) => item.key == value)?.value);
+    }, [value]);
 
     useEffect(() => {
         if (_firstRender) {
@@ -143,6 +151,7 @@ const SelectDropDown: FC<SelectDropDownProps> = ({
                     </ScrollView>
                 </Animated.View>
             ) : null}
+            {textError && <Text style={styles.errorField}>{textError}</Text>}
         </View>
     );
 };
@@ -168,4 +177,7 @@ const styles = StyleSheet.create({
         borderColor: MCOLORS.darkgray,
     },
     arrow: { transform: [{ rotate: '180deg' }] },
+    errorField: {
+        color: MCOLORS.red,
+    },
 });

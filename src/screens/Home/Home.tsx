@@ -38,7 +38,7 @@ type HomeScreenProps = {
 
 const Home: FC<HomeScreenProps> = ({ navigation }) => {
     const route = useRoute<HomeRouteProp>();
-    const tripData = route.params.trip;
+    const tripData = route?.params?.trip;
     const expenses = [
         {
             type: 'Move',
@@ -192,7 +192,9 @@ const Home: FC<HomeScreenProps> = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
                 <View style={{ marginBottom: MSIZES.padding }}>
-                    <TouchableOpacity onPress={() => navigation.navigate(NEWTRIP_SCREEN)}>
+                    <TouchableOpacity
+                        onPress={() => navigation.navigate(NEWTRIP_SCREEN, { tripData })}
+                    >
                         <TripSummary
                             tripName={tripData.tripName}
                             date={tripData.date}

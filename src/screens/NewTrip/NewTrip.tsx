@@ -1,6 +1,6 @@
 import { API, Hub, graphqlOperation } from 'aws-amplify';
 import moment from 'moment';
-import React, { FC, useState } from 'react';
+import React, { FC, useEffect, useState } from 'react';
 import { Controller, SubmitErrorHandler, useForm } from 'react-hook-form';
 import {
     Alert,
@@ -25,21 +25,16 @@ import { GlobalFormatDate, MCOLORS, MFONTS, MSIZES, TRIPLIST_SCREEN, icons } fro
 import { TagOptions } from '../../consts/common';
 import { NEWTRIP_SCREEN } from '../../consts/screenName';
 import { useSharedState } from '../../contexts';
-import { createTrip } from '../../graphql/mutations';
-import { TagType } from '../../type/type';
+import { createTrip, updateTrip } from '../../graphql/mutations';
+import { TagType, TripType } from '../../type/type';
+import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native';
 
 type NewTripProps = {
     navigation: any;
 };
 
-type TFormTrip = {
-    tripName: string;
-    destination: string;
-    budget: number;
-    date: Date;
-    tag: TagType;
-    description: string;
-    isRequiredRiskAssessment: boolean;
+type NewTripRouteProp = RouteProp<ParamListBase> & {
+    params: { tripData: TripType };
 };
 
 const NewTrip: FC<NewTripProps> = ({ navigation }) => {
@@ -47,19 +42,36 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
         control,
         handleSubmit,
         formState: { errors },
-        clearErrors,
         reset,
-    } = useForm<TFormTrip | any>();
+        setValue,
+    } = useForm<TripType | any>();
+    const route = useRoute<NewTripRouteProp>();
+    const { tripData } = route?.params || '';
     const { userData } = useSharedState();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
     const [date, setDate] = useState<any>(new Date());
+    const [isCreated, setIsCreated] = useState<boolean>(false);
 
-    const handleOnSave = async (data: TFormTrip) => {
+    useEffect(() => {
+        if (tripData) {
+            setIsCreated(true);
+            setValue('tripName', tripData.tripName);
+            setValue('destination', tripData.destination);
+            setValue('budget', tripData.budget?.toString());
+            setValue('date', tripData.date);
+            setValue('tag', tripData.tag);
+            setValue('description', tripData.description);
+            setValue('isRequiredRiskAssessment', tripData.isRequiredRiskAssessment);
+            return;
+        }
+        setIsCreated(false);
+    }, [tripData]);
+
+    const handleOnSave = async (data: TripType) => {
         if (isLoading) {
             return;
         }
-
         setIsLoading(true);
         try {
             Hub.dispatch(NEWTRIP_SCREEN, {
@@ -69,8 +81,18 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                 ...data,
                 userID: userData?.id,
             };
-            console.log({ newTripObj });
-            await API.graphql(graphqlOperation(createTrip, { input: newTripObj }));
+
+            const updateTripObj = {
+                ...data,
+                id: userData?.id,
+            };
+
+            if (isCreated) {
+                await API.graphql(graphqlOperation(updateTrip, { input: updateTripObj }));
+            } else {
+                await API.graphql(graphqlOperation(createTrip, { input: newTripObj }));
+            }
+
             reset();
             navigation.navigate(TRIPLIST_SCREEN);
         } catch (e) {
@@ -79,7 +101,8 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
 
         setIsLoading(false);
     };
-    const onError: SubmitErrorHandler<TFormTrip> = (errors, e) => {
+
+    const onError: SubmitErrorHandler<TripType> = (errors, e) => {
         return console.log(errors);
     };
 
@@ -94,18 +117,19 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                     </View>
 
                     <View style={styles.form}>
-                        <Text style={{ ...MFONTS.body1, textAlign: 'center' }}>New Trip</Text>
+                        <Text style={{ ...MFONTS.body1, textAlign: 'center' }}>{`${
+                            isCreated ? 'Update' : 'New'
+                        } Trip`}</Text>
                         <Controller
                             control={control}
                             render={({ field: { onChange, value } }) => (
                                 <View>
                                     <Text style={styles.inputTile}>Trip name</Text>
                                     <CustomTextInput
+                                        placeholder="Enter your answer"
                                         onChangeText={onChange}
                                         value={value}
-                                        textError={
-                                            errors.tripName ? errors.destination?.message : ''
-                                        }
+                                        textError={errors.tripName ? errors.tripName?.message : ''}
                                     />
                                 </View>
                             )}
@@ -120,6 +144,7 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                                 <View>
                                     <Text style={styles.inputTile}>Destination</Text>
                                     <CustomTextInput
+                                        placeholder="Enter your answer"
                                         onChangeText={onChange}
                                         value={value}
                                         textError={
@@ -142,16 +167,20 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                                         <View>
                                             <InputTitle title="Budget" />
                                             <InputWithIcon
+                                                placeholder="Enter your answer"
                                                 value={value}
                                                 onChangeText={onChange}
                                                 icon={<Image source={icons.dollar} />}
+                                                textError={
+                                                    errors.budget ? errors.budget?.message : ''
+                                                }
                                             />
                                         </View>
                                     )}
                                     name="budget"
-                                    // rules={{
-                                    //     required: { value: true, message: 'Field is required' },
-                                    // }}
+                                    rules={{
+                                        required: { value: true, message: 'Field is required' },
+                                    }}
                                 />
                             </View>
 
@@ -184,7 +213,6 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                                         </View>
                                     )}
                                     name="date"
-                                    // rules={{ required: true }}
                                 />
                             </View>
                         </View>
@@ -193,22 +221,39 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                             render={({ field: { value, onChange } }) => (
                                 <View>
                                     <Text style={styles.inputTile}>Tag</Text>
-                                    <SelectDropDown setSelected={onChange} data={TagOptions} />
+                                    <SelectDropDown
+                                        textError={errors.budget ? errors.budget?.message : ''}
+                                        placeholder="Select your answer"
+                                        setSelected={onChange}
+                                        data={TagOptions}
+                                        value={value}
+                                    />
                                 </View>
                             )}
                             name="tag"
-                            // rules={{ required: true }}
+                            rules={{
+                                required: { value: true, message: 'Field is required' },
+                            }}
                         />
                         <Controller
                             control={control}
                             render={({ field: { value, onChange } }) => (
                                 <View>
                                     <Text style={styles.inputTile}>Destination</Text>
-                                    <TextField value={value} onChangeText={onChange} />
+                                    <TextField
+                                        textError={
+                                            errors.description ? errors.description?.message : ''
+                                        }
+                                        placeholder="Enter your answer"
+                                        value={value}
+                                        onChangeText={onChange}
+                                    />
                                 </View>
                             )}
                             name="description"
-                            // rules={{ required: true }}
+                            rules={{
+                                required: { value: true, message: 'Field is required' },
+                            }}
                         />
                         <Controller
                             control={control}
@@ -221,13 +266,12 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                                             thumbColor="#f4f3f4"
                                             ios_backgroundColor="#3e3e3e"
                                             onValueChange={onChange}
-                                            value={value}
+                                            value={value || false}
                                         />
                                     </View>
                                 </View>
                             )}
                             name="isRequiredRiskAssessment"
-                            // rules={{ required: true }}
                         />
 
                         <SaveBtn

@@ -1,16 +1,19 @@
 import React, { FC } from 'react';
-import { StyleSheet, TextInput, TextInputProps, View } from 'react-native';
+import { StyleSheet, Text, TextInput, TextInputProps, View } from 'react-native';
 import { MCOLORS, MFONTS, MSIZES } from '../../consts';
 
 type InputWithIconProps = {
     icon: any;
-}
+};
 
-const InputWithIcon: FC<InputWithIconProps & TextInputProps> = (props) => {
+const InputWithIcon: FC<{ textError?: any } & InputWithIconProps & TextInputProps> = (props) => {
     return (
-        <View style={styles.inputWithIcon}>
-            {props.icon}
-            <TextInput {...props} style={styles.text} />
+        <View>
+            <View style={styles.inputWithIcon}>
+                {props.icon}
+                <TextInput {...props} style={styles.text} />
+            </View>
+            {props.textError && <Text style={styles.errorField}>{props.textError}</Text>}
         </View>
     );
 };
@@ -36,5 +39,8 @@ const styles = StyleSheet.create({
     text: {
         flex: 1,
         paddingLeft: MSIZES.base,
+    },
+    errorField: {
+        color: MCOLORS.red,
     },
 });
