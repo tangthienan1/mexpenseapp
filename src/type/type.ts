@@ -4,6 +4,15 @@ export type HomeEntriesItemProps = {
     date: string;
 };
 
+export type UserDataType = {
+    createdAt: string;
+    email: string;
+    id: string;
+    image: string;
+    name: string;
+    updatedAt: string;
+}
+
 export type NoteItemType = {
     date: string;
     title: string;

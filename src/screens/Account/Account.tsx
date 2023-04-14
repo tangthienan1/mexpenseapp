@@ -7,10 +7,10 @@ import { MCOLORS, MFONTS, MSIZES, icons } from '../../consts';
 import { useSharedState } from '../../contexts';
 
 const Account = () => {
-    const { user } = useSharedState();
-    console.log({ user });
-    const userEmail = user.attributes.email
-    const userName = user.attributes.name
+    const { userData } = useSharedState();
+    console.log({ userData });
+    const userEmail = userData.email
+    const userName = userData.name
 
     const [isSignOut, setIsSignOut] = useState(false);
 

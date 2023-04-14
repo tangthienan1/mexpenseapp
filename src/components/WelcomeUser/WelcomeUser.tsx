@@ -16,8 +16,8 @@ const WelcomeUser: FC<WelcomeUserProps> = ({
     toolIcon,
     toolSourceNavigate,
 }) => {
-    const { user } = useSharedState();
-    const userName = user?.attributes?.name;
+    const { userData } = useSharedState();
+    const userName = userData?.name;
     return (
         <View style={styles.WelcomeUserWrapper}>
             <TouchableOpacity

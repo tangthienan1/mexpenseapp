@@ -2,6 +2,7 @@
 import moment from 'moment';
 import React, { FC, useState, useEffect } from 'react';
 import {
+    Alert,
     Image,
     SafeAreaView,
     ScrollView,
@@ -21,79 +22,71 @@ import WelcomeUser from '../../components/WelcomeUser';
 import { GlobalFormatDate, icons, MCOLORS, MFONTS, MSIZES } from '../../consts';
 import { useSharedState } from '../../contexts';
 import { TagType } from '../../type/type';
-
-const Tags = [
-    {
-        value: 'Business',
-        key: 'business',
-    },
-
-    {
-        value: 'Family',
-        key: 'family',
-    },
-    {
-        value: 'Personal',
-        key: 'personal',
-    },
-];
+import { API, graphqlOperation } from 'aws-amplify';
+import { createTrip } from '../../graphql/mutations';
+import { Tags } from '../../consts/util';
 
 type NewTripProps = {
     navigation: any;
 };
 
 const NewTrip: FC<NewTripProps> = ({ navigation }) => {
-    const { user } = useSharedState();
+    const { userData } = useSharedState();
     const [tripName, setTripName] = useState<string | undefined>();
     const [destination, setDestination] = useState<string | undefined>();
     const [budget, setBudget] = useState<number | undefined>();
     const [date, setDate] = useState<any>(new Date());
-    const [selectedTag, setSelectedTag] = useState<TagType | undefined>();
+    const [tag, setTag] = useState<TagType | undefined>();
     const [description, setDescription] = useState<string | undefined>();
     const [isRequiredRiskAssessment, setIsRequiredRiskAssessment] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     console.log('newTripData', {
         tripName,
         destination,
         budget,
         date,
-        selectedTag,
+        tag,
         description,
         isRequiredRiskAssessment,
     });
 
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
-    const handleOnSave = () => {
-        // const requiredRiskAssessment = isRequiredRiskAssessment
-        //     ? RequiredRiskAssessmentType.TRUE
-        //     : RequiredRiskAssessmentType.FALSE;
-        // if (
-        //     tripName &&
-        //     destination &&
-        //     budget &&
-        //     date &&
-        //     selectedTag &&
-        //     description &&
-        //     isRequiredRiskAssessment
-        // ) {
-        //     console.log('first');
-        //     createTrip({
-        //         name: tripName,
-        //         destination,
-        //         budget,
-        //         date,
-        //         tag: selectedTag,
-        //         description,
-        //         requiredRiskAssessment,
-        //         userUID: user.uid,
-        //     });
-        // }
+    const handleOnSave = async () => {
+        if (isLoading) {
+            return;
+        }
+        setIsLoading(true);
+        try {
+            const newTrip = {
+                tripName,
+                destination,
+                budget,
+                date,
+                tag,
+                description,
+                isRequiredRiskAssessment,
+                userId: userData.id,
+            };
+            const addedTrip = await API.graphql(graphqlOperation(createTrip, { input: newTrip }));
+            console.log('Trip added obj', newTrip);
+            console.log('Trip added', addedTrip);
+        } catch (e) {
+            console.log('testtttt', (e as any).message)
+            Alert.alert((e as any).message);
+        }
+        setIsLoading(false);
     };
 
     return (
         <SafeAreaView style={styles.newTripScreen}>
-            <CustomDatePicker open={isDatePickerOpen} currentDate={date} setOpen={setIsDatePickerOpen} setDate={setDate} />
+            <CustomDatePicker
+                open={isDatePickerOpen}
+                currentDate={date}
+                setOpen={setIsDatePickerOpen}
+                setDate={setDate}
+            />
 
             <ScrollView>
                 <View style={styles.newTripWrapper}>
@@ -136,7 +129,7 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                         </View>
 
                         <Text style={styles.inputTile}>Tag</Text>
-                        <SelectDropDown setSelected={setSelectedTag} data={Tags} />
+                        <SelectDropDown setSelected={setTag} data={Tags} />
 
                         <Text style={styles.inputTile}>Description</Text>
                         <TextField onChangeText={(text) => setDescription(text)} />
@@ -152,7 +145,7 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                             />
                         </View>
 
-                        <SaveBtn onPress={() => handleOnSave} />
+                        <SaveBtn isLoading={isLoading} onPress={handleOnSave} />
                     </View>
                 </View>
             </ScrollView>

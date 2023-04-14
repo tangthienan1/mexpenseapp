@@ -18,11 +18,11 @@ type Expense @model @auth(rules: [{allow: public}]) {
 
 type Trip @model @auth(rules: [{allow: public}]) {
   id: ID!
-  tripName: String
+  tripName: String!
   destination: String
-  budget: Float
-  date: String
-  tag: String
+  budget: Float!
+  date: AWSDateTime
+  tag: String!
   description: String
   isRequiredRiskAssessment: Boolean
   userID: ID! @index(name: "byUser")

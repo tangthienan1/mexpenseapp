@@ -1,7 +1,7 @@
 import { createContext } from 'react';
 
 export type SharedState = {
-    user?: any;
+    userData?: any;
     currentTrip?: any;
     expenseList?: any;
     // Need to improve updateSharedState type, current ts see that possibly undefined

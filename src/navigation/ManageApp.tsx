@@ -4,6 +4,8 @@ import React, { FC, useEffect } from 'react';
 import { useSharedState } from '../contexts';
 import Tabs from './tabs';
 import { AddExpense, AddNote } from '../screens';
+import { API, graphqlOperation } from 'aws-amplify';
+import { getUser } from '../graphql/queries';
 
 const Stack = createNativeStackNavigator();
 
@@ -15,7 +17,14 @@ const ManageApp: FC<ManageAppProps> = ({ user }) => {
     const { updateSharedState } = useSharedState();
 
     useEffect(() => {
-        updateSharedState({ user });
+        const getUserDataOnDB = async () => {
+            const resp: any = await API.graphql(
+                graphqlOperation(getUser, { id: user.attributes.sub })
+            );
+            const userData = resp.data.getUser;
+            updateSharedState({ userData });
+        };
+        getUserDataOnDB();
     }, []);
 
     return (

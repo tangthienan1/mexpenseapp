@@ -206,7 +206,7 @@ export const schema = {
                     "name": "tripName",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "destination": {
@@ -220,13 +220,13 @@ export const schema = {
                     "name": "budget",
                     "isArray": false,
                     "type": "Float",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "date": {
                     "name": "date",
                     "isArray": false,
-                    "type": "String",
+                    "type": "AWSDateTime",
                     "isRequired": false,
                     "attributes": []
                 },
@@ -234,7 +234,7 @@ export const schema = {
                     "name": "tag",
                     "isArray": false,
                     "type": "String",
-                    "isRequired": false,
+                    "isRequired": true,
                     "attributes": []
                 },
                 "description": {
@@ -434,5 +434,5 @@ export const schema = {
     "enums": {},
     "nonModels": {},
     "codegenVersion": "3.4.0",
-    "version": "1f9473e44358d485028f0ae1b703d88b"
+    "version": "1ff9c35f83ae45de1b3978c12d80ef92"
 };
