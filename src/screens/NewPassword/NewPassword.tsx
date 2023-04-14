@@ -23,6 +23,7 @@ type RouteParamProps = {
 type NewPasswordRouteProp = RouteProp<ParamListBase> & {
     params: RouteParamProps;
 };
+
 type NewPasswordProps = {
     navigation: any;
 };

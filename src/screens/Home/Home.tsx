@@ -1,4 +1,3 @@
-/* eslint-disable react-native/no-inline-styles */
 import React, { FC, useEffect, useState } from 'react';
 import {
     FlatList,
@@ -12,24 +11,35 @@ import {
 import Layout from '../../components/Layout';
 import TripSummary from '../../components/TripSummary';
 import WelcomeUser from '../../components/WelcomeUser';
-import { ADDEXPENSE_SCREEN, icons, MCOLORS, MFONTS, MSIZES, NOTE_SCREEN, TRIPLIST_SCREEN } from '../../consts';
-import { HomeEntriesItemProps } from '../../type/type';
+import {
+    ADDEXPENSE_SCREEN,
+    icons,
+    MCOLORS,
+    MFONTS,
+    MSIZES,
+    NOTE_SCREEN,
+    TRIPLIST_SCREEN,
+} from '../../consts';
+import { HomeEntriesItemProps, TripType } from '../../type/type';
+import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native';
+
+type RouteParamProps = {
+    trip: TripType;
+};
+
+type HomeRouteProp = RouteProp<ParamListBase> & {
+    params: RouteParamProps;
+};
 
 type HomeScreenProps = {
     navigation: any;
 };
 
 const Home: FC<HomeScreenProps> = ({ navigation }) => {
+    const route = useRoute<HomeRouteProp>();
+    const tripData = route.params.trip;
+    console.log({ tripData });
     const totalExpense = 123456;
-    const TripInfo = {
-        tripName: 'Temp trip name',
-        destination: 'temp trip destination',
-        budget: '123111',
-        date: 'tempDate',
-        tag: 'dfa',
-        description: 'test description',
-        requiredRiskAssessment: true,
-    };
 
     const expenses = [
         {
@@ -97,9 +107,9 @@ const Home: FC<HomeScreenProps> = ({ navigation }) => {
     const [expenseList, setExpenseList] = useState<HomeEntriesItemProps[] | undefined>();
 
     useEffect(() => {
-        setExpenseList(expenses)
-    }, [])
-    
+        setExpenseList(expenses);
+    }, []);
+
     //ExpenseList max length is 8 for display on banner
     const sortedExpenseList = expenseList?.sort((prev, next) => -prev.amount + next.amount);
     const uniqueExpenseListByValue = [
@@ -176,7 +186,7 @@ const Home: FC<HomeScreenProps> = ({ navigation }) => {
                 </View>
                 <View style={{ marginBottom: MSIZES.padding }}>
                     <TripSummary
-                        tripName={TripInfo.tripName}
+                        tripName={tripData.tripName}
                         date="14 - oct - 2022"
                         tag="Business"
                         isRequiredRiskAssessment={true}

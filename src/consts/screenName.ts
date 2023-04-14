@@ -1,9 +1,11 @@
+export const HOME_SCREEN = 'Home';
+export const NOTE_SCREEN = 'Note';
+export const NEWTRIP_SCREEN = 'NewTrip';
 export const TRIPLIST_SCREEN = 'TripList';
 export const ACCOUNT_SCREEN = 'Account';
 export const LOGIN_SCREEN = 'Login';
 export const ADDEXPENSE_SCREEN = 'AddExpense';
 export const ADDNOTE_SCREEN = 'AddNote';
-export const NOTE_SCREEN = 'Note';
 export const SIGNUP_SCREEN = 'SignUp';
 export const CONFIRMEMAIL_SCREEN = 'ConfirmEmail';
 export const FORGOTPASSWORD_SCREEN = 'ForgotPassword';

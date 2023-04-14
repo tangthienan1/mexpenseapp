@@ -2,16 +2,16 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import React, { FC } from 'react';
 import { GestureResponderEvent, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
-import { icons, MCOLORS } from '../consts';
+import { icons, MCOLORS, TRIPLIST_SCREEN } from '../consts';
 import { Account, Home, NewTrip, Note, TripList } from '../screens';
+import { ACCOUNT_SCREEN, HOME_SCREEN, NEWTRIP_SCREEN, NOTE_SCREEN } from '../consts/screenName';
+import { useSharedState } from '../contexts';
 
 const Tab = createBottomTabNavigator();
 
 type NewTripButtonProps = {
     children: any;
-    onPress?: (
-        e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | GestureResponderEvent
-      ) => void;
+    onPress?: (e: React.MouseEvent<HTMLAnchorElement, MouseEvent> | GestureResponderEvent) => void;
 };
 
 const NewTripButton: FC<NewTripButtonProps> = ({ children, onPress }) => {
@@ -77,6 +77,7 @@ const TabBarCustomButton: FC<TabBarCustomButtonProps> = ({
 };
 
 const Tabs = () => {
+    const { currentTrip } = useSharedState();
     return (
         <Tab.Navigator
             screenOptions={{
@@ -90,9 +91,10 @@ const Tabs = () => {
                     backgroundColor: 'transparent',
                 },
             }}
+            initialRouteName={TRIPLIST_SCREEN}
         >
             <Tab.Screen
-                name="Home"
+                name={HOME_SCREEN}
                 component={Home}
                 options={{
                     tabBarIcon: ({ focused }) => (
@@ -115,7 +117,7 @@ const Tabs = () => {
                 }}
             />
             <Tab.Screen
-                name="Note"
+                name={NOTE_SCREEN}
                 component={Note}
                 options={{
                     tabBarIcon: ({ focused }) => (
@@ -138,7 +140,7 @@ const Tabs = () => {
                 }}
             />
             <Tab.Screen
-                name="NewTrip"
+                name={NEWTRIP_SCREEN}
                 component={NewTrip}
                 options={{
                     tabBarIcon: ({ focused }) => (
@@ -157,7 +159,7 @@ const Tabs = () => {
                 }}
             />
             <Tab.Screen
-                name="TripList"
+                name={TRIPLIST_SCREEN}
                 component={TripList}
                 options={{
                     tabBarIcon: ({ focused }) => (
@@ -180,7 +182,7 @@ const Tabs = () => {
                 }}
             />
             <Tab.Screen
-                name="Account"
+                name={ACCOUNT_SCREEN}
                 component={Account}
                 options={{
                     tabBarIcon: ({ focused }) => (

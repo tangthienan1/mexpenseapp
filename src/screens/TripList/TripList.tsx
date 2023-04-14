@@ -15,6 +15,7 @@ import WelcomeUser from '../../components/WelcomeUser';
 import { MCOLORS, MSIZES, icons } from '../../consts';
 import { useSharedState } from '../../contexts';
 import { TripType } from '../../type/type';
+import { HOME_SCREEN } from '../../consts/screenName';
 
 type TripListProps = {
     navigation: any;
@@ -38,8 +39,8 @@ const TripList: FC<TripListProps> = ({ navigation }) => {
         }
     };
 
-    const handleTripItemPress = (item: TripType) => {
-        navigation.navigate()
+    const handleTripItemPress = (trip: TripType) => {
+        navigation.navigate(HOME_SCREEN, { trip });
     };
 
     function Header() {
