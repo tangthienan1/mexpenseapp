@@ -19,7 +19,7 @@ type HomeScreenProps = {
     navigation: any;
 };
 
-const HomeScreen: FC<HomeScreenProps> = ({ navigation }) => {
+const Home: FC<HomeScreenProps> = ({ navigation }) => {
     const totalExpense = 123456;
     const TripInfo = {
         tripName: 'Temp trip name',
@@ -322,4 +322,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default HomeScreen;
+export default Home;

@@ -1,5 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useRef, useState } from 'react';
 import {
     FlatList,
     Image,
@@ -12,9 +12,7 @@ import {
 import Layout from '../../components/Layout';
 import TripSummary from '../../components/TripSummary';
 import WelcomeUser from '../../components/WelcomeUser';
-import { icons, MCOLORS, MSIZES } from '../../consts';
-import { API, graphqlOperation } from 'aws-amplify';
-import { tripsByUserID } from '../../graphql/queries';
+import { MCOLORS, MSIZES, icons } from '../../consts';
 import { useSharedState } from '../../contexts';
 import { TripType } from '../../type/type';
 
@@ -24,8 +22,7 @@ type TripListProps = {
 
 const TripList: FC<TripListProps> = ({ navigation }) => {
     const { tripList } = useSharedState();
-    console.log({ tripList });
-    const [filteredTripList, setFilterTripList] = useState<TripType[]| undefined>(tripList);
+    const [filteredTripList, setFilterTripList] = useState<TripType[] | undefined>(tripList);
     const searchTextRef = useRef('');
 
     const handleSearchPress = () => {
@@ -39,6 +36,10 @@ const TripList: FC<TripListProps> = ({ navigation }) => {
         } else {
             setFilterTripList(tripList);
         }
+    };
+
+    const handleTripItemPress = (item: TripType) => {
+        navigation.navigate()
     };
 
     function Header() {
@@ -70,7 +71,7 @@ const TripList: FC<TripListProps> = ({ navigation }) => {
 
     const renderTripItem: ListRenderItem<any> = ({ item }) => {
         return (
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => handleTripItemPress(item)}>
                 <TripSummary
                     tripName={item.tripName}
                     date={item.date}

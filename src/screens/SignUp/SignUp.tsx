@@ -72,12 +72,11 @@ const SignUp: FC<SignUpProps> = ({ navigation }) => {
             !error?.reEnPassword
         ) {
             try {
-                const res = Auth.signUp({
+                Auth.signUp({
                     username: email,
                     password,
                     attributes: { name },
                 });
-                console.log({ res });
                 setIsLoading(false);
                 navigation.navigate(CONFIRMEMAIL_SCREEN, { email });
             } catch (e) {

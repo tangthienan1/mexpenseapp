@@ -58,15 +58,13 @@ const NewPassword: FC<NewPasswordProps> = ({ navigation }) => {
 
         if (email && newPassword && changeEmailCode && !error?.newPassword && !error?.screen) {
             try {
-                const response = await Auth.forgotPasswordSubmit(
+                await Auth.forgotPasswordSubmit(
                     email,
                     changeEmailCode,
                     newPassword
                 );
-                console.log({ response });
                 navigation.navigate(LOGIN_SCREEN);
             } catch (e) {
-                console.log({ e });
                 setError((e as any).message);
             }
         } else {

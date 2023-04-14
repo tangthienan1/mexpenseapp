@@ -3,7 +3,7 @@ import AddExpense from './AddExpense';
 import AddNote from './AddNote/AddNote';
 import ConfirmEmail from './ConfirmEmail';
 import ForgotPassword from './ForgotPassword';
-import HomeScreen from './HomeScreen';
+import Home from './Home';
 import Login from './Login';
 import NewPassword from './NewPassword';
 import NewTrip from './NewTrip';
@@ -17,7 +17,7 @@ export {
     AddNote,
     ConfirmEmail,
     ForgotPassword,
-    HomeScreen,
+    Home,
     Login,
     NewPassword,
     NewTrip,

@@ -8,9 +8,8 @@ import { useSharedState } from '../../contexts';
 
 const Account = () => {
     const { userData } = useSharedState();
-    console.log({ userData });
-    const userEmail = userData.email
-    const userName = userData.name
+    const userEmail = userData?.email
+    const userName = userData?.name
 
     const [isSignOut, setIsSignOut] = useState(false);
 

@@ -47,7 +47,9 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
         if (isLoading) {
             return;
         }
+
         setIsLoading(true);
+
         try {
             const newTrip = {
                 tripName,
@@ -57,17 +59,14 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                 tag,
                 description,
                 isRequiredRiskAssessment,
-                userID: userData.id,
+                userID: userData?.id,
             };
-            const addedTrip = await API.graphql(graphqlOperation(createTrip, { input: newTrip }));
-
-            console.log('Trip added', addedTrip);
-
+            await API.graphql(graphqlOperation(createTrip, { input: newTrip }));
             navigation.navigate(TRIPLIST_SCREEN)
-
         } catch (e) {
             Alert.alert((e as any).message);
         }
+
         setIsLoading(false);
     };
 

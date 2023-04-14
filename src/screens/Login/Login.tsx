@@ -35,10 +35,8 @@ const Login: FC<LoginProps> = ({navigation}) => {
 
         if (email && password) {
             try {
-                const response = await Auth.signIn(email, password);
-                console.log({ response });
+                await Auth.signIn(email, password);
             } catch (e) {
-                console.log({ e });
                 setError((e as any).message);
             }
         } else {

@@ -37,7 +37,6 @@ const ForgotPassword: FC<ForgotPasswordProps> = ({ navigation }) => {
                 await Auth.forgotPassword(email);
                 navigation.navigate(NEWPASSWORD_SCREEN, { email });
             } catch (e) {
-                console.log({ e });
                 setError((e as any).message);
             }
         } else {

@@ -3,7 +3,7 @@ import React, { FC } from 'react';
 import { GestureResponderEvent, Image, StyleSheet, TouchableOpacity, View } from 'react-native';
 import Svg, { Path } from 'react-native-svg';
 import { icons, MCOLORS } from '../consts';
-import { Account, HomeScreen, NewTrip, Note, TripList } from '../screens';
+import { Account, Home, NewTrip, Note, TripList } from '../screens';
 
 const Tab = createBottomTabNavigator();
 
@@ -92,8 +92,8 @@ const Tabs = () => {
             }}
         >
             <Tab.Screen
-                name="HomeScreen"
-                component={HomeScreen}
+                name="Home"
+                component={Home}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Image
