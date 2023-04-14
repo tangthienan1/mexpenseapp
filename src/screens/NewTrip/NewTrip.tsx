@@ -1,4 +1,5 @@
 /* eslint-disable react-native/no-inline-styles */
+import { API, Hub, graphqlOperation } from 'aws-amplify';
 import moment from 'moment';
 import React, { FC, useState, useEffect } from 'react';
 import {
@@ -21,12 +22,12 @@ import SaveBtn from '../../components/SaveBtn';
 import SelectDropDown from '../../components/SelectDropDown';
 import { CustomTextInput, TextField } from '../../components/TextInput';
 import WelcomeUser from '../../components/WelcomeUser';
-import { GlobalFormatDate, icons, MCOLORS, MFONTS, MSIZES, TRIPLIST_SCREEN } from '../../consts';
-import { useSharedState } from '../../contexts';
-import { TagType } from '../../type/type';
-import { API, graphqlOperation } from 'aws-amplify';
-import { createTrip } from '../../graphql/mutations';
+import { GlobalFormatDate, MCOLORS, MFONTS, MSIZES, TRIPLIST_SCREEN, icons } from '../../consts';
 import { TagOptions } from '../../consts/common';
+import { useSharedState } from '../../contexts';
+import { createTrip } from '../../graphql/mutations';
+import { TagType } from '../../type/type';
+import { NEWTRIP_SCREEN } from '../../consts/screenName';
 
 type NewTripProps = {
     navigation: any;
@@ -39,6 +40,7 @@ type TFormTrip = {
     date: Date;
     tag: TagType;
     description: string;
+    isRequiredRiskAssessment: boolean;
 };
 
 const NewTrip: FC<NewTripProps> = ({ navigation }) => {
@@ -48,40 +50,31 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
         formState: { errors },
         clearErrors,
     } = useForm<TFormTrip | any>();
-
-    const [date, setDate] = useState<any>(new Date());
-    const [isRequiredRiskAssessment, setIsRequiredRiskAssessment] = useState<boolean>(false);
+    const { userData } = useSharedState();
     const [isLoading, setIsLoading] = useState<boolean>(false);
-
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+    const [date, setDate] = useState<any>(new Date());
 
     useEffect(() => {
         clearErrors(['tripName']);
     }, []);
 
-    const handleOnSave = (data: TFormTrip) => {
-        console.log(data);
-        // if (isLoading) {
-        //     return;
-        // }
-        // setIsLoading(true);
-        // try {
-        //     const newTrip = {
-        //         tripName,
-        //         destination,
-        //         budget,
-        //         date,
-        //         tag,
-        //         description,
-        //         isRequiredRiskAssessment,
-        //         userID: userData?.id,
-        //     };
-        //     await API.graphql(graphqlOperation(createTrip, { input: newTrip }));
-        //     navigation.navigate(TRIPLIST_SCREEN);
-        // } catch (e) {
-        //     Alert.alert((e as any).message);
-        // }
-        // setIsLoading(false);
+    const handleOnSave = async (data: TFormTrip) => {
+        try {
+            Hub.dispatch(NEWTRIP_SCREEN, {
+                event: 'addTrip',
+            });
+            const newTripObj = {
+                ...data,
+                userID: userData?.id,
+            };
+            await API.graphql(graphqlOperation(createTrip, { input: newTripObj }));
+            navigation.navigate(TRIPLIST_SCREEN);
+        } catch (e) {
+            Alert.alert((e as any).message);
+        }
+
+        setIsLoading(false);
     };
     const onError: SubmitErrorHandler<TFormTrip> = (errors, e) => {
         return console.log(errors);
@@ -89,13 +82,6 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
 
     return (
         <SafeAreaView style={styles.newTripScreen}>
-            <CustomDatePicker
-                open={isDatePickerOpen}
-                currentDate={date}
-                setOpen={setIsDatePickerOpen}
-                setDate={setDate}
-            />
-
             <ScrollView>
                 <View style={styles.newTripWrapper}>
                     <WelcomeUser navigation={navigation} />
@@ -134,7 +120,7 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                                         onChangeText={onChange}
                                         value={value}
                                         textError={
-                                            errors.tripName ? errors.destination?.message : ''
+                                            errors.destination ? errors.destination?.message : ''
                                         }
                                     />
                                 </View>
@@ -183,6 +169,15 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                                                     icon={<Image source={icons.date} />}
                                                 />
                                             </TouchableOpacity>
+                                            <CustomDatePicker
+                                                open={isDatePickerOpen}
+                                                currentDate={date}
+                                                setOpen={setIsDatePickerOpen}
+                                                setDate={(value) => {
+                                                    setDate(value);
+                                                    onChange(value);
+                                                }}
+                                            />
                                         </View>
                                     )}
                                     name="date"
@@ -222,15 +217,13 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                                             trackColor={{ false: '#767577', true: MCOLORS.emerald }}
                                             thumbColor="#f4f3f4"
                                             ios_backgroundColor="#3e3e3e"
-                                            onValueChange={() =>
-                                                setIsRequiredRiskAssessment((prev) => !prev)
-                                            }
-                                            value={isRequiredRiskAssessment}
+                                            onValueChange={onChange}
+                                            value={value}
                                         />
                                     </View>
                                 </View>
                             )}
-                            name="description"
+                            name="isRequiredRiskAssessment"
                             // rules={{ required: true }}
                         />
 
@@ -244,6 +237,7 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                             <View style={{ flex: 1, marginRight: MSIZES.padding }}>
                                 <InputTitle title="Budget" />
                                 <InputWithIcon
+                                    keyboardType="numeric"
                                     onChangeText={(text) => setBudget(+text)}
                                     icon={<Image source={icons.dollar} />}
                                 />

@@ -15,16 +15,18 @@ export const useAuth = () => {
                 setUser(null);
             }
         };
-        
+
         //Add event to listen when user signIn || signOut
         const amplifyChanelListener = (data: any) => {
             if (data.payload.event === 'signIn' || data.payload.event === 'signOut') {
                 checkUser();
             }
         };
-        Hub.listen('auth', amplifyChanelListener);
+
+        const hubListenerCancelToken = Hub.listen('auth', amplifyChanelListener);
+
         return () => {
-            Hub.remove('auth', amplifyChanelListener);
+            hubListenerCancelToken();
         };
     }, []);
 
