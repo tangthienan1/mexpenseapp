@@ -41,6 +41,7 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
     const [description, setDescription] = useState<string | undefined>();
     const [isRequiredRiskAssessment, setIsRequiredRiskAssessment] = useState<boolean>(false);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    console.log({ date });
 
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
 
@@ -65,6 +66,7 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
                 isRequiredRiskAssessment,
                 userID: userData?.id,
             };
+            console.log({ newTripObj });
             await API.graphql(graphqlOperation(createTrip, { input: newTripObj }));
             navigation.navigate(TRIPLIST_SCREEN);
         } catch (e) {

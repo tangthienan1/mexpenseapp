@@ -38,8 +38,6 @@ type HomeScreenProps = {
 const Home: FC<HomeScreenProps> = ({ navigation }) => {
     const route = useRoute<HomeRouteProp>();
     const tripData = route.params.trip;
-    console.log({ tripData });
-    const totalExpense = 123456;
 
     const expenses = [
         {
@@ -105,8 +103,12 @@ const Home: FC<HomeScreenProps> = ({ navigation }) => {
     ];
 
     const [expenseList, setExpenseList] = useState<HomeEntriesItemProps[] | undefined>();
-
+    const [totalExpense, setTotalExpense] = useState<number>();
     useEffect(() => {
+        const expenseSum = expenses.reduce((accumulator, expense) => {
+            return accumulator + expense.amount;
+        }, 0);
+        setTotalExpense(expenseSum);
         setExpenseList(expenses);
     }, []);
 
@@ -139,13 +141,18 @@ const Home: FC<HomeScreenProps> = ({ navigation }) => {
                         <Text style={{ ...MFONTS.h4 }}>Total Expense</Text>
                         <Text style={{ ...MFONTS.h4 }}>$ {total}</Text>
                     </View>
-                    <Text style={{ ...MFONTS.h4 }}>Major expenses</Text>
+                    <Text style={{ ...MFONTS.body2 }}>Top expenses</Text>
                 </View>
             );
         };
 
         const renderMajorItem: ListRenderItem<HomeEntriesItemProps> = ({ item }) => (
-            <View style={{ flex: 1, flexDirection: 'row', marginRight: MSIZES.padding }}>
+            <View
+                style={{
+                    flexDirection: 'row',
+                    marginRight: MSIZES.padding,
+                }}
+            >
                 <Text style={{ ...MFONTS.body4 }}>{item.type}</Text>
                 <Text style={{ ...MFONTS.body4, paddingLeft: 8 }}>${item.amount}</Text>
             </View>
@@ -187,9 +194,9 @@ const Home: FC<HomeScreenProps> = ({ navigation }) => {
                 <View style={{ marginBottom: MSIZES.padding }}>
                     <TripSummary
                         tripName={tripData.tripName}
-                        date="14 - oct - 2022"
-                        tag="Business"
-                        isRequiredRiskAssessment={true}
+                        date={tripData.date}
+                        tag={tripData.tag}
+                        isRequiredRiskAssessment={tripData.isRequiredRiskAssessment}
                     />
                 </View>
                 <View style={{ flexDirection: 'row' }}>
@@ -228,7 +235,7 @@ const Home: FC<HomeScreenProps> = ({ navigation }) => {
         const HeaderComponent = () => (
             <View>
                 {renderHeader()}
-                {renderBanner(totalExpense)}
+                {totalExpense && renderBanner(totalExpense)}
                 {renderTrip()}
                 {renderRecentEntries()}
             </View>
@@ -305,6 +312,7 @@ const styles = StyleSheet.create({
     },
     bannerWrapper: {
         flex: 1,
+        justifyContent: 'space-between',
         borderRadius: 20,
         padding: MSIZES.padding * 1.5,
         backgroundColor: MCOLORS.emerald,
