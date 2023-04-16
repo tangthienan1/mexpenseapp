@@ -16,8 +16,11 @@ type TripSummaryProps = {
 const TripSummary: FC<TripSummaryProps> = ({ tripName, date, tag, isRequiredRiskAssessment }) => {
     const [isShowRequiredAssessmentModal, setIsShowRequiredAssessmentModal] =
         useState<boolean>(false);
+
     return (
         <View style={styles.tripItemWrapper}>
+            <TouchableOpacity style={styles.deleteTripBtn}>
+            </TouchableOpacity>
             <IsRequiredRiskAssessmentModal
                 isShowRequiredAssessmentModal={isShowRequiredAssessmentModal}
                 onRequestClose={() => setIsShowRequiredAssessmentModal(false)}
@@ -42,6 +45,15 @@ const TripSummary: FC<TripSummaryProps> = ({ tripName, date, tag, isRequiredRisk
 export default TripSummary;
 
 const styles = StyleSheet.create({
+    deleteTripBtn: {
+        position: 'absolute',
+        top: 0,
+        left: 0,
+
+        width: 10,
+        height: 10,
+        backgroundColor: 'red',
+    },
     tripItemWrapper: {
         padding: MSIZES.padding * 1.5,
         marginVertical: MSIZES.padding,
