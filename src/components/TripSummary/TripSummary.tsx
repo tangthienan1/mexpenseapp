@@ -1,9 +1,10 @@
-import { Image, Modal, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { FC, useState } from 'react';
-import { icons, MCOLORS, MFONTS, MSIZES } from '../../consts';
-import Tag from '../Tag/Tag';
 import moment from 'moment';
+import React, { FC, useState } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { MCOLORS, MFONTS, MSIZES, icons } from '../../consts';
 import { DisplayFormatDate } from '../../consts/common';
+import { IsRequiredRiskAssessmentModal } from '../../modal';
+import Tag from '../Tag';
 
 type TripSummaryProps = {
     tripName: string;
@@ -17,28 +18,10 @@ const TripSummary: FC<TripSummaryProps> = ({ tripName, date, tag, isRequiredRisk
         useState<boolean>(false);
     return (
         <View style={styles.tripItemWrapper}>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={isShowRequiredAssessmentModal}
-                onRequestClose={() => {
-                    setIsShowRequiredAssessmentModal(!isShowRequiredAssessmentModal);
-                }}
-            >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <Text style={styles.modalText}>Required Risk Assessment</Text>
-                        <Pressable
-                            style={[styles.button, styles.buttonClose]}
-                            onPress={() =>
-                                setIsShowRequiredAssessmentModal(!isShowRequiredAssessmentModal)
-                            }
-                        >
-                            <Text style={styles.textStyle}>Close</Text>
-                        </Pressable>
-                    </View>
-                </View>
-            </Modal>
+            <IsRequiredRiskAssessmentModal
+                isShowRequiredAssessmentModal={isShowRequiredAssessmentModal}
+                onRequestClose={() => setIsShowRequiredAssessmentModal(false)}
+            />
             <Text style={{ ...MFONTS.body2, marginBottom: MSIZES.padding }}>{tripName}</Text>
             <View style={styles.contentWrapper}>
                 <Text style={styles.date}>Date: {moment(date).format(DisplayFormatDate)}</Text>
