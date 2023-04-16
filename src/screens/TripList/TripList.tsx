@@ -1,3 +1,4 @@
+import { API, Hub, graphqlOperation } from 'aws-amplify';
 import React, { FC, useEffect, useRef, useState } from 'react';
 import {
     FlatList,
@@ -12,18 +13,17 @@ import Layout from '../../components/Layout';
 import TripSummary from '../../components/TripSummary';
 import WelcomeUser from '../../components/WelcomeUser';
 import { MCOLORS, MSIZES, icons } from '../../consts';
-import { useSharedState } from '../../contexts';
-import { HubPayload, TripType } from '../../type/type';
 import { HOME_SCREEN, NEWTRIP_SCREEN } from '../../consts/screenName';
-import { API, Hub, graphqlOperation } from 'aws-amplify';
+import { useSharedState } from '../../contexts';
 import { tripsByUserID } from '../../graphql/queries';
+import { TripType } from '../../type/type';
 
 type TripListProps = {
     navigation: any;
 };
 
 const TripList: FC<TripListProps> = ({ navigation }) => {
-    const { userData } = useSharedState();
+    const { userData, updateSharedState } = useSharedState();
     const [tripList, setTripList] = useState<TripType[]>();
     const [filteredTripList, setFilterTripList] = useState<TripType[] | undefined>();
     const searchTextRef = useRef('');
@@ -57,8 +57,8 @@ const TripList: FC<TripListProps> = ({ navigation }) => {
     };
 
     const handleTripItemPress = (trip: TripType) => {
-        console.log({ trip });
-        navigation.navigate(HOME_SCREEN, { trip });
+        updateSharedState({ currentTrip: trip });
+        navigation.navigate(HOME_SCREEN);
     };
 
     function Header() {

@@ -1,3 +1,4 @@
+import { API, Hub, graphqlOperation } from 'aws-amplify';
 import React, { FC, useEffect, useState } from 'react';
 import {
     FlatList,
@@ -8,109 +9,58 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+
 import Layout from '../../components/Layout';
 import TripSummary from '../../components/TripSummary';
 import WelcomeUser from '../../components/WelcomeUser';
 import {
     ADDEXPENSE_SCREEN,
-    icons,
     MCOLORS,
     MFONTS,
     MSIZES,
     NOTE_SCREEN,
     TRIPLIST_SCREEN,
+    icons,
 } from '../../consts';
-import { HomeEntriesItemProps, TripType } from '../../type/type';
-import { ParamListBase, RouteProp, useRoute } from '@react-navigation/native';
 import { NEWTRIP_SCREEN } from '../../consts/screenName';
-
-type RouteParamProps = {
-    trip: TripType;
-};
-
-type HomeRouteProp = RouteProp<ParamListBase> & {
-    params: RouteParamProps;
-};
+import { useSharedState } from '../../contexts';
+import { expensesByTripID } from '../../graphql/queries';
+import { ExpenseType } from '../../type/type';
+import moment from 'moment';
+import { DisplayFormatDate } from '../../consts/common';
 
 type HomeScreenProps = {
     navigation: any;
 };
 
 const Home: FC<HomeScreenProps> = ({ navigation }) => {
-    const route = useRoute<HomeRouteProp>();
-    const tripData = route.params.trip;
-    const expenses = [
-        {
-            type: 'Move',
-            amount: 300,
-            date: 'Sun 30 Oct',
-        },
-        {
-            type: 'Food',
-            amount: 300,
-            date: 'Sun 30 Oct',
-        },
-        {
-            type: 'Hotel',
-            amount: 200,
-            date: 'Sun 30 Oct',
-        },
-        {
-            type: 'Taxi',
-            amount: 100,
-            date: 'Sun 30 Oct',
-        },
-        {
-            type: 'Move',
-            amount: 600,
-            date: 'Sun 30 Oct',
-        },
-        {
-            type: 'Food',
-            amount: 400,
-            date: 'Sun 30 Oct',
-        },
-        {
-            type: 'Hotel',
-            amount: 100,
-            date: 'Sun 30 Oct',
-        },
-        {
-            type: 'Taxi',
-            amount: 700,
-            date: 'Sun 30 Oct',
-        },
-        {
-            type: 'TestHigh',
-            amount: 800,
-            date: 'Sun 30 Oct',
-        },
-        {
-            type: 'Food',
-            amount: 400,
-            date: 'Sun 30 Oct',
-        },
-        {
-            type: 'Hotel',
-            amount: 100,
-            date: 'Sun 30 Oct',
-        },
-        {
-            type: 'Taxi',
-            amount: 700,
-            date: 'Sun 30 Oct',
-        },
-    ];
+    const { currentTrip } = useSharedState();
 
-    const [expenseList, setExpenseList] = useState<HomeEntriesItemProps[] | undefined>();
-    const [totalExpense, setTotalExpense] = useState<number>();
+    console.log({ currentTrip });
+
+    const [expenseList, setExpenseList] = useState<ExpenseType[]>([]);
+
     useEffect(() => {
-        const expenseSum = expenses.reduce((accumulator, expense) => {
-            return accumulator + expense.amount;
-        }, 0);
-        setTotalExpense(expenseSum);
-        setExpenseList(expenses);
-    }, []);
+        const getTripExpense = async () => {
+            const resp: any = await API.graphql(
+                graphqlOperation(expensesByTripID, { tripID: currentTrip?.id })
+            );
+            const expenseList: ExpenseType[] = resp.data.expensesByTripID.items;
+
+            setExpenseList(expenseList);
+        };
+        getTripExpense();
+
+        const addExpenseListener = (data: any) => {
+            if (data.payload.event === 'addExpense') {
+                getTripExpense();
+            }
+        };
+
+        const hubListenerCancelToken = Hub.listen(ADDEXPENSE_SCREEN, addExpenseListener);
+
+        return () => hubListenerCancelToken();
+    }, [currentTrip]);
 
     //ExpenseList max length is 8 for display on banner
     const sortedExpenseList = expenseList?.sort((prev, next) => -prev.amount + next.amount);
@@ -127,7 +77,11 @@ const Home: FC<HomeScreenProps> = ({ navigation }) => {
         );
     }
 
-    function renderBanner(total: number) {
+    function renderBanner() {
+        const totalExpense = expenseList?.reduce((accumulator, expense) => {
+            return accumulator + expense.amount;
+        }, 0);
+
         const BannerHeader = () => {
             return (
                 <View>
@@ -139,14 +93,14 @@ const Home: FC<HomeScreenProps> = ({ navigation }) => {
                         }}
                     >
                         <Text style={{ ...MFONTS.h4 }}>Total Expense</Text>
-                        <Text style={{ ...MFONTS.h4 }}>$ {total}</Text>
+                        <Text style={{ ...MFONTS.h4 }}>$ {totalExpense}</Text>
                     </View>
                     <Text style={{ ...MFONTS.body2 }}>Top expenses</Text>
                 </View>
             );
         };
 
-        const renderMajorItem: ListRenderItem<HomeEntriesItemProps> = ({ item }) => (
+        const renderMajorItem: ListRenderItem<ExpenseType> = ({ item }) => (
             <View
                 style={{
                     flexDirection: 'row',
@@ -193,12 +147,14 @@ const Home: FC<HomeScreenProps> = ({ navigation }) => {
                 </View>
                 <View style={{ marginBottom: MSIZES.padding }}>
                     <TouchableOpacity onPress={() => navigation.navigate(NEWTRIP_SCREEN)}>
-                        <TripSummary
-                            tripName={tripData.tripName}
-                            date={tripData.date}
-                            tag={tripData.tag}
-                            isRequiredRiskAssessment={tripData.isRequiredRiskAssessment}
-                        />
+                        {currentTrip && (
+                            <TripSummary
+                                tripName={currentTrip.tripName}
+                                date={currentTrip.date}
+                                tag={currentTrip.tag}
+                                isRequiredRiskAssessment={currentTrip.isRequiredRiskAssessment}
+                            />
+                        )}
                     </TouchableOpacity>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
@@ -237,7 +193,7 @@ const Home: FC<HomeScreenProps> = ({ navigation }) => {
         const HeaderComponent = () => (
             <View>
                 {renderHeader()}
-                {totalExpense && renderBanner(totalExpense)}
+                {renderBanner()}
                 {renderTrip()}
                 {renderRecentEntries()}
             </View>
@@ -253,14 +209,15 @@ const Home: FC<HomeScreenProps> = ({ navigation }) => {
                 <View style={{ flex: 1 }}>
                     <Text style={{ ...MFONTS.h3 }}>Recent Entries</Text>
                 </View>
+                {!(expenseList.length > 0) && <Text>Not expense founded</Text>}
             </View>
         );
 
-        const renderItem: ListRenderItem<HomeEntriesItemProps> = ({ item }) => (
+        const renderItem: ListRenderItem<ExpenseType> = ({ item }) => (
             <View style={styles.recentEntriesItemWrapper}>
                 <View>
                     <Text style={{ ...MFONTS.h3 }}>{item.type}</Text>
-                    <Text>{item.date}</Text>
+                    <Text>{moment(item.date).format(DisplayFormatDate)}</Text>
                 </View>
                 <Text style={{ ...MFONTS.h3, color: MCOLORS.emerald }}>${item.amount}</Text>
             </View>
@@ -272,7 +229,7 @@ const Home: FC<HomeScreenProps> = ({ navigation }) => {
                 contentContainerStyle={{ paddingHorizontal: MSIZES.padding * 3 }}
                 numColumns={1}
                 data={expenseList}
-                keyExtractor={(item, index) => `_key${index.toString()}`}
+                keyExtractor={(_, index) => `_key${index.toString()}`}
                 renderItem={renderItem}
                 showsVerticalScrollIndicator={false}
                 ListFooterComponent={<View style={{ marginBottom: 80 }} />}

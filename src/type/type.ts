@@ -1,9 +1,3 @@
-export type HomeEntriesItemProps = {
-    type: string;
-    amount: number;
-    date: string;
-};
-
 export type UserDataType = {
     id: string;
     name: string;

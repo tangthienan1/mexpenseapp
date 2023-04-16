@@ -49,13 +49,19 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
         formState: { errors },
         clearErrors,
         reset,
-    } = useForm<TFormTrip | any>();
+    } = useForm<TFormTrip | any>({
+        defaultValues:{
+            date: new Date()
+        }
+    });
+
     const { userData } = useSharedState();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-    const [date, setDate] = useState<any>(new Date());
+    const [date, setDate] = useState<Date>(new Date());
 
     const handleOnSave = async (data: TFormTrip) => {
+        console.log({ data });
         if (isLoading) {
             return;
         }

@@ -1,28 +1,66 @@
 import moment from 'moment';
 import React, { FC, useState } from 'react';
-import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
-import GoBackWithHeader from '../../components/GoBackWithHeader';
+import { API, Hub, graphqlOperation } from 'aws-amplify';
 import CustomDatePicker from '../../components/CustomDatePicker';
+import GoBackWithHeader from '../../components/GoBackWithHeader';
 import InputTitle from '../../components/InputTitle';
 import InputWithIcon from '../../components/InputWithIcon';
 import SaveBtn from '../../components/SaveBtn';
 import { CustomTextInput, TextField } from '../../components/TextInput';
-import { GlobalFormatDate, LOGIN_SCREEN, MCOLORS, MSIZES, icons } from '../../consts';
+import {
+    ADDEXPENSE_SCREEN,
+    GlobalFormatDate,
+    MCOLORS,
+    MSIZES,
+    icons
+} from '../../consts';
+import { HOME_SCREEN } from '../../consts/screenName';
+import { useSharedState } from '../../contexts';
+import { createExpense } from '../../graphql/mutations';
 
 type AddExpenseProps = {
     navigation: any;
 };
 
 const AddExpense: FC<AddExpenseProps> = ({ navigation }) => {
+    const { currentTrip } = useSharedState();
     const [open, setOpen] = useState<boolean>(false);
     const [amount, setAmount] = useState<number | undefined>();
     const [type, setType] = useState<string | undefined>();
     const [location, setLocation] = useState<string | undefined>();
     const [date, setDate] = useState<Date>(new Date());
     const [comment, setComment] = useState<string | undefined>();
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    console.log('add expense', { amount, type, location, date, comment });
+    const handleOnSave = async () => {
+        if (isLoading) {
+            return;
+        }
+
+        setIsLoading(true);
+        try {
+            Hub.dispatch(ADDEXPENSE_SCREEN, {
+                event: 'addExpense',
+            });
+            const newExpenseObj = {
+                amount,
+                type,
+                location,
+                date,
+                comment,
+                tripID: currentTrip?.id,
+            };
+            console.log({ newExpenseObj });
+            await API.graphql(graphqlOperation(createExpense, { input: newExpenseObj }));
+            // reset();
+            navigation.navigate(HOME_SCREEN);
+        } catch (e) {
+            Alert.alert((e as any).message);
+        }
+        setIsLoading(false);
+    };
 
     return (
         <SafeAreaView style={styles.ADDEXPENSE_SCREEN}>
@@ -75,7 +113,7 @@ const AddExpense: FC<AddExpenseProps> = ({ navigation }) => {
                     <InputTitle title="Comment" />
                     <TextField onChangeText={(text) => setComment(text)} />
 
-                    <SaveBtn onPress={() => navigation.navigate(LOGIN_SCREEN)} />
+                    <SaveBtn isLoading={isLoading} onPress={handleOnSave} />
                 </View>
             </View>
         </SafeAreaView>
