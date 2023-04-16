@@ -1,6 +1,7 @@
 import moment from 'moment';
 import React, { FC, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Button } from 'react-native-paper';
 import { MCOLORS, MFONTS, MSIZES, icons } from '../../consts';
 import { DisplayFormatDate } from '../../consts/common';
 import { IsRequiredRiskAssessmentModal } from '../../modal';
@@ -19,8 +20,7 @@ const TripSummary: FC<TripSummaryProps> = ({ tripName, date, tag, isRequiredRisk
 
     return (
         <View style={styles.tripItemWrapper}>
-            <TouchableOpacity style={styles.deleteTripBtn}>
-            </TouchableOpacity>
+            <Button icon="camera">Press me</Button>
             <IsRequiredRiskAssessmentModal
                 isShowRequiredAssessmentModal={isShowRequiredAssessmentModal}
                 onRequestClose={() => setIsShowRequiredAssessmentModal(false)}
