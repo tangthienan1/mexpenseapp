@@ -46,7 +46,7 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
         setValue,
     } = useForm<TripType | any>();
     const route = useRoute<NewTripRouteProp>();
-    const { tripData } = route?.params || '';
+    const tripData = route?.params?.tripData;
     const { userData } = useSharedState();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -84,11 +84,18 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
 
             const updateTripObj = {
                 ...data,
-                id: userData?.id,
+                budget: Number(data.budget),
+                id: tripData?.id,
+                userID: userData?.id,
             };
 
+            console.log({ updateTripObj });
+
             if (isCreated) {
-                await API.graphql(graphqlOperation(updateTrip, { input: updateTripObj }));
+                const resp: any = await API.graphql(
+                    graphqlOperation(updateTrip, { input: updateTripObj })
+                );
+                console.log('testtt', resp.data.updateTrip);
             } else {
                 await API.graphql(graphqlOperation(createTrip, { input: newTripObj }));
             }
