@@ -6,6 +6,8 @@ import { MCOLORS, MFONTS, MSIZES, icons } from '../../consts';
 import { DisplayFormatDate } from '../../consts/common';
 import { IsRequiredRiskAssessmentModal } from '../../modal';
 import Tag from '../Tag';
+import { DeleteTripBtn } from './TripSummary.style';
+import { Icon } from 'react-native-paper/lib/typescript/src/components/Avatar/Avatar';
 
 type TripSummaryProps = {
     tripName: string;
@@ -20,7 +22,11 @@ const TripSummary: FC<TripSummaryProps> = ({ tripName, date, tag, isRequiredRisk
 
     return (
         <View style={styles.tripItemWrapper}>
-            <Button icon="camera">Press me</Button>
+            <DeleteTripBtn
+                icon="close"
+                onPress={() => console.log('pressssss')}
+                children={undefined}
+            />
             <IsRequiredRiskAssessmentModal
                 isShowRequiredAssessmentModal={isShowRequiredAssessmentModal}
                 onRequestClose={() => setIsShowRequiredAssessmentModal(false)}

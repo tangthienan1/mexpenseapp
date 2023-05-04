@@ -16,11 +16,12 @@ yarn ios
 - aws-amplify (BE)
 - PubSub pattern(Hub)
 - react hook
-- AWS cognito
+- AWS Cognito
+- AWS DynamoDB
+- AWS AppSync
 - GraphQL
 - eslint/prettier
 - react-navigation
-- aws dynamoDB
 # Function
 - Authentication
 - Home
