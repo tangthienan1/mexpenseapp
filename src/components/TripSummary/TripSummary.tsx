@@ -1,32 +1,63 @@
+import { API, Hub, graphqlOperation } from 'aws-amplify';
 import moment from 'moment';
 import React, { FC, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Button } from 'react-native-paper';
-import { MCOLORS, MFONTS, MSIZES, icons } from '../../consts';
+import { DeleteTripInput, Trip } from '../../API';
+import { MCOLORS, MFONTS, MSIZES, TRIPLIST_SCREEN, TRIP_CHANNEL, icons, theme } from '../../consts';
 import { DisplayFormatDate } from '../../consts/common';
+import { deleteTrip } from '../../graphql/mutations';
 import { IsRequiredRiskAssessmentModal } from '../../modal';
 import Tag from '../Tag';
 import { DeleteTripBtn } from './TripSummary.style';
-import { Icon } from 'react-native-paper/lib/typescript/src/components/Avatar/Avatar';
 
 type TripSummaryProps = {
-    tripName: string;
-    date: Date;
-    tag: string;
-    isRequiredRiskAssessment: boolean;
+    trip: Trip;
+    isDeleteAble?: boolean;
 };
 
-const TripSummary: FC<TripSummaryProps> = ({ tripName, date, tag, isRequiredRiskAssessment }) => {
+const TripSummary: FC<TripSummaryProps> = ({ trip, isDeleteAble = false }) => {
+    const { id: tripId, tripName, date, tag, isRequiredRiskAssessment, _version } = trip;
     const [isShowRequiredAssessmentModal, setIsShowRequiredAssessmentModal] =
         useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+
+    const onDeleteTrip = async () => {
+        if (isLoading) {
+            return;
+        }
+        setIsLoading(true);
+        try {
+            Hub.dispatch(TRIP_CHANNEL, {
+                event: 'deleteTrip',
+            });
+
+            console.log('trippp', { trip });
+            const deleteTripInput: DeleteTripInput = {
+                id: tripId,
+                _version,
+            };
+
+            const res = await API.graphql(
+                graphqlOperation(deleteTrip, { input: deleteTripInput })
+            );
+
+            console.log('testt', { res });
+        } catch (e) {
+            console.log(e);
+        }
+
+        setIsLoading(false);
+    };
 
     return (
         <View style={styles.tripItemWrapper}>
-            <DeleteTripBtn
-                icon="close"
-                onPress={() => console.log('pressssss')}
-                children={undefined}
-            />
+            {isDeleteAble && (
+                <DeleteTripBtn
+                    icon="close"
+                    iconColor={theme.MCOLORS.red}
+                    onPress={() => onDeleteTrip()}
+                />
+            )}
             <IsRequiredRiskAssessmentModal
                 isShowRequiredAssessmentModal={isShowRequiredAssessmentModal}
                 onRequestClose={() => setIsShowRequiredAssessmentModal(false)}

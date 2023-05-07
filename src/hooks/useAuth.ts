@@ -25,9 +25,7 @@ export const useAuth = () => {
 
         const hubListenerCancelToken = Hub.listen('auth', amplifyChanelListener);
 
-        return () => {
-            hubListenerCancelToken();
-        };
+        return () => hubListenerCancelToken();
     }, []);
 
     //Add User to DB if not exist

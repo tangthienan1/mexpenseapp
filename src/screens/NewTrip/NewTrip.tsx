@@ -21,9 +21,8 @@ import SaveBtn from '../../components/SaveBtn';
 import SelectDropDown from '../../components/SelectDropDown';
 import { CustomTextInput, TextField } from '../../components/TextInput';
 import WelcomeUser from '../../components/WelcomeUser';
-import { GlobalFormatDate, MCOLORS, MFONTS, MSIZES, TRIPLIST_SCREEN, icons } from '../../consts';
+import { GlobalFormatDate, MCOLORS, MFONTS, MSIZES, TRIPLIST_SCREEN, TRIP_CHANNEL, icons } from '../../consts';
 import { TagOptions } from '../../consts/common';
-import { NEWTRIP_SCREEN } from '../../consts/screenName';
 import { useSharedState } from '../../contexts';
 import { createTrip } from '../../graphql/mutations';
 import { TagType } from '../../type/type';
@@ -35,10 +34,10 @@ type NewTripProps = {
 type TFormTrip = {
     tripName: string;
     destination: string;
-    budget: number;
+    budget?: number;
     date: Date;
     tag: TagType;
-    description: string;
+    description?: string;
     isRequiredRiskAssessment: boolean;
 };
 
@@ -47,7 +46,7 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
         control,
         handleSubmit,
         formState: { errors },
-        clearErrors,
+        // clearErrors,
         reset,
     } = useForm<TFormTrip | any>({
         defaultValues:{
@@ -68,7 +67,7 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
 
         setIsLoading(true);
         try {
-            Hub.dispatch(NEWTRIP_SCREEN, {
+            Hub.dispatch(TRIP_CHANNEL, {
                 event: 'addTrip',
             });
             const newTripObj = {

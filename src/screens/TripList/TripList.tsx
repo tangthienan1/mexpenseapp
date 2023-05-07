@@ -9,14 +9,14 @@ import {
     TouchableOpacity,
     View,
 } from 'react-native';
+import { Trip } from '../../API';
 import Layout from '../../components/Layout';
 import TripSummary from '../../components/TripSummary';
 import WelcomeUser from '../../components/WelcomeUser';
-import { MCOLORS, MSIZES, icons } from '../../consts';
+import { MCOLORS, MSIZES, TRIP_CHANNEL, icons } from '../../consts';
 import { HOME_SCREEN, NEWTRIP_SCREEN } from '../../consts/screenName';
 import { useSharedState } from '../../contexts';
 import { tripsByUserID } from '../../graphql/queries';
-import { TripType } from '../../type/type';
 
 type TripListProps = {
     navigation: any;
@@ -24,21 +24,36 @@ type TripListProps = {
 
 const TripList: FC<TripListProps> = ({ navigation }) => {
     const { userData, updateSharedState } = useSharedState();
-    const [tripList, setTripList] = useState<TripType[]>();
-    const [filteredTripList, setFilterTripList] = useState<TripType[] | undefined>();
+    const [tripList, setTripList] = useState<Trip[]>();
+    const [filteredTripList, setFilterTripList] = useState<Trip[] | undefined>();
     const searchTextRef = useRef('');
+
+    console.log({tripList})
 
     useEffect(() => {
         const getTripListData = async () => {
+            console.log('effect')
             const resp: any = await API.graphql(
                 graphqlOperation(tripsByUserID, { userID: userData?.id }) // even use "?" but it will never be undefined when user pass login
             );
-            setTripList(resp.data.tripsByUserID.items);
-            setFilterTripList(resp.data.tripsByUserID.items);
-        };
+            const tripListFromResponse = resp.data.tripsByUserID.items;
+            const filterDeletedTripItem = tripListFromResponse.filter(
+                (trip: Trip) => !trip._deleted
+            );
 
+            setTripList(filterDeletedTripItem);
+            setFilterTripList(filterDeletedTripItem);
+        };
         getTripListData();
-        const hubListenerCancelToken = Hub.listen(NEWTRIP_SCREEN, () => getTripListData());
+
+        //Add event to listen when trip deleted || signOut
+        const amplifyChanelListenerToTrip = (data: any) => {
+            console.log('amplify')
+            if (data.payload.event === 'deleteTrip' || data.payload.event === 'addTrip') {
+                getTripListData();
+            }
+        };
+        const hubListenerCancelToken = Hub.listen(TRIP_CHANNEL, amplifyChanelListenerToTrip);
 
         return () => hubListenerCancelToken();
     }, [userData]);
@@ -56,7 +71,7 @@ const TripList: FC<TripListProps> = ({ navigation }) => {
         }
     };
 
-    const handleTripItemPress = (trip: TripType) => {
+    const handleTripItemPress = (trip: Trip) => {
         updateSharedState({ currentTrip: trip });
         navigation.navigate(HOME_SCREEN);
     };
@@ -88,15 +103,11 @@ const TripList: FC<TripListProps> = ({ navigation }) => {
         );
     }
 
-    const renderTripItem: ListRenderItem<any> = ({ item }) => {
+    const renderTripItem: ListRenderItem<Trip> = ({ item }) => {
+        console.log('render')
         return (
             <TouchableOpacity onPress={() => handleTripItemPress(item)}>
-                <TripSummary
-                    tripName={item.tripName}
-                    date={item.date}
-                    tag={item.tag}
-                    isRequiredRiskAssessment={item.isRequiredRiskAssessment}
-                />
+                <TripSummary isDeleteAble={true} trip={item} />
             </TouchableOpacity>
         );
     };

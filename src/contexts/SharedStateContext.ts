@@ -1,10 +1,11 @@
 import { createContext } from 'react';
-import { ExpenseType, TripType, UserDataType } from '../type/type';
+import { Trip } from '../API';
+import { ExpenseType, UserDataType } from '../type/type';
 
 export type SharedState = {
     userData?: UserDataType;
-    tripList?: TripType[];
-    currentTrip?: TripType;
+    tripList?: Trip[];
+    currentTrip?: Trip;
     expenseList?: ExpenseType;
     // Need to improve updateSharedState type, current ts see that possibly undefined
     // updateSharedState?: (newState: SharedState) => void;

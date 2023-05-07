@@ -23,18 +23,6 @@ export type ExpenseType = {
     tripID: string;
 }
 
-export type TripType = {
-    id: string;
-    tripName: string;
-    destination: string;
-    budget?: number;
-    date: Date;
-    tag: TagType;
-    description?: string;
-    isRequiredRiskAssessment: boolean;
-    userID?: string;
-};
-
 export enum TagType {
     BUSINESS = 'business',
     FAMILY = 'family',

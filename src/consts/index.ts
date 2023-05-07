@@ -13,6 +13,7 @@ import {
 } from './screenName';
 import theme, { MCOLORS, MFONTS, MSIZES } from './theme';
 import { GlobalFormatDate } from './common';
+import { TRIP_CHANNEL, EXPENSE_CHANNEL } from './channel';
 
 export {
     icons,
@@ -31,4 +32,6 @@ export {
     NOTE_SCREEN,
     SIGNUP_SCREEN,
     CONFIRMEMAIL_SCREEN,
+    TRIP_CHANNEL,
+    EXPENSE_CHANNEL
 };

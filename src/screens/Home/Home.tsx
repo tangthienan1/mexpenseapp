@@ -147,14 +147,7 @@ const Home: FC<HomeScreenProps> = ({ navigation }) => {
                 </View>
                 <View style={{ marginBottom: MSIZES.padding }}>
                     <TouchableOpacity onPress={() => navigation.navigate(NEWTRIP_SCREEN)}>
-                        {currentTrip && (
-                            <TripSummary
-                                tripName={currentTrip.tripName}
-                                date={currentTrip.date}
-                                tag={currentTrip.tag}
-                                isRequiredRiskAssessment={currentTrip.isRequiredRiskAssessment}
-                            />
-                        )}
+                        {currentTrip && <TripSummary trip={currentTrip} />}
                     </TouchableOpacity>
                 </View>
                 <View style={{ flexDirection: 'row' }}>
