@@ -72,7 +72,7 @@ const NewTrip: FC<NewTripProps> = ({ navigation }) => {
             });
             const newTripObj = {
                 ...data,
-                userID: userData?.id,
+                userID: userData.id,
             };
             console.log({ newTripObj });
             await API.graphql(graphqlOperation(createTrip, { input: newTripObj }));

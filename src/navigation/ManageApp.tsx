@@ -1,33 +1,13 @@
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import React, { FC, useEffect } from 'react';
+import React from 'react';
 import { useSharedState } from '../contexts';
-import Tabs from './tabs';
 import { AddExpense, AddNote } from '../screens';
-import { API, graphqlOperation } from 'aws-amplify';
-import { getUser, tripsByUserID } from '../graphql/queries';
+import Tabs from './tabs';
 
 const Stack = createNativeStackNavigator();
 
-type ManageAppProps = {
-    user: any;
-};
-
-const ManageApp: FC<ManageAppProps> = ({ user }) => {
-    const { updateSharedState } = useSharedState();
-
-    useEffect(() => {
-        const getUserDataOnDB = async () => {
-            const resp: any = await API.graphql(
-                graphqlOperation(getUser, { id: user.attributes.sub })
-            );
-            const userData = resp.data.getUser;
-            updateSharedState({ userData });
-        };
-
-        getUserDataOnDB();
-    }, [user]);
-
+const ManageApp = () => {
     return (
         <NavigationContainer>
             <Stack.Navigator

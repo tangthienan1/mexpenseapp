@@ -1,12 +1,3 @@
-export type UserDataType = {
-    id: string;
-    name: string;
-    email: string;
-    image: string;
-    createdAt: string;
-    updatedAt: string;
-}
-
 export type NoteType = {
     date: string;
     title: string;
